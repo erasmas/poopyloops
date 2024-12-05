@@ -1,0 +1,41 @@
+<.header>
+  Listing Playlists
+  <:actions>
+    <.link patch={~p"/playlists/new"}>
+      <.button>New Playlist</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="playlists"
+  rows={@streams.playlists}
+  row_click={fn {_id, playlist} -> JS.navigate(~p"/playlists/#{playlist}") end}
+>
+  <:col :let={{_id, playlist}} label="Name"><%= playlist.name %></:col>
+  <:action :let={{_id, playlist}}>
+    <div class="sr-only">
+      <.link navigate={~p"/playlists/#{playlist}"}>Show</.link>
+    </div>
+    <.link patch={~p"/playlists/#{playlist}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, playlist}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: playlist.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="playlist-modal" show on_cancel={JS.patch(~p"/playlists")}>
+  <.live_component
+    module={PoopyLoopsWeb.PlaylistLive.FormComponent}
+    id={@playlist.id || :new}
+    title={@page_title}
+    action={@live_action}
+    playlist={@playlist}
+    patch={~p"/playlists"}
+  />
+</.modal>

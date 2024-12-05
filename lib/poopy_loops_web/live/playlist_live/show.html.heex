@@ -1,0 +1,26 @@
+<.header>
+  Playlist <%= @playlist.id %>
+  <:subtitle>This is a playlist record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit playlist</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @playlist.name %></:item>
+</.list>
+
+<.back navigate={~p"/playlists"}>Back to playlists</.back>
+
+<.modal :if={@live_action == :edit} id="playlist-modal" show on_cancel={JS.patch(~p"/playlists/#{@playlist}")}>
+  <.live_component
+    module={PoopyLoopsWeb.PlaylistLive.FormComponent}
+    id={@playlist.id}
+    title={@page_title}
+    action={@live_action}
+    playlist={@playlist}
+    patch={~p"/playlists/#{@playlist}"}
+  />
+</.modal>
