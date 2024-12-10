@@ -1,16 +1,45 @@
 <.header>
-  Playlist <%= @playlist.id %>
-  <:subtitle>This is a playlist record from your database.</:subtitle>
+  <%= @playlist.name %>
   <:actions>
     <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit playlist</.button>
+      <.button>Rename</.button>
     </.link>
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Name"><%= @playlist.name %></:item>
-</.list>
+<form phx-submit="add_track" class="mt-6">
+  <label for="youtube_link" class="block text-sm font-medium text-gray-700">Add YouTube Link</label>
+  <input type="url" name="youtube_link" id="youtube_link" required class="mt-1 p-2 border rounded w-full">
+  <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Add Track</button>
+</form>
+
+<%= if @tracks == [] do %>
+  <p>No tracks added yet.</p>
+<% else %>
+  <ul class="mt-4 space-y-4">
+    <%= for track <- @tracks do %>
+      <li class="bg-white shadow p-4 rounded">
+        <p><strong>Added by:</strong> User <%= track.user_id %></p>
+        <p><strong>Added at:</strong> <%= track.added_at %></p>
+        <%= if video_id = get_video_id(track.url) do %>
+          <div class="mt-4">
+            <iframe
+              width="560"
+              height="315"
+              src={"https://www.youtube.com/embed/#{video_id}"}
+              title="YouTube video player"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        <% else %>
+          <p class="text-red-500">Invalid YouTube URL</p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
 
 <.back navigate={~p"/playlists"}>Back to playlists</.back>
 

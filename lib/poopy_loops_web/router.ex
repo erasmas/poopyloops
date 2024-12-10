@@ -56,12 +56,6 @@ defmodule PoopyLoopsWeb.Router do
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
       live "/users/reset_password/:token", UserResetPasswordLive, :edit
-
-      live "/playlists", PlaylistLive.Index, :index
-      live "/playlists/new", PlaylistLive.Index, :new
-      live "/playlists/:id/edit", PlaylistLive.Index, :edit
-      live "/playlists/:id", PlaylistLive.Show, :show
-      live "/playlists/:id/show/edit", PlaylistLive.Show, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -74,6 +68,12 @@ defmodule PoopyLoopsWeb.Router do
       on_mount: [{PoopyLoopsWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+
+      live "/playlists", PlaylistLive.Index, :index
+      live "/playlists/new", PlaylistLive.Index, :new
+      live "/playlists/:id/edit", PlaylistLive.Index, :edit
+      live "/playlists/:id", PlaylistLive.Show, :show
+      live "/playlists/:id/show/edit", PlaylistLive.Show, :edit
     end
   end
 
