@@ -32,6 +32,7 @@ defmodule PoopyLoops.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:ecto_ulid, "~> 0.3"},
       {:bcrypt_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.17"},
       {:phoenix_ecto, "~> 4.5"},

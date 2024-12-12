@@ -31,6 +31,9 @@ config :poopy_loops, PoopyLoopsWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :poopy_loops, PoopyLoops.Mailer, adapter: Swoosh.Adapters.Local
 
+# https://github.com/TheRealReal/ecto-ulid#migration
+config :poopy_loops, PoopyLoops.Repo, migration_primary_key: [name: :id, type: :binary_id]
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",

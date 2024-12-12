@@ -3,6 +3,8 @@ defmodule PoopyLoopsWeb.PlaylistLive.FormComponent do
 
   alias PoopyLoops.Playlists
 
+  require Logger
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -64,16 +66,20 @@ defmodule PoopyLoopsWeb.PlaylistLive.FormComponent do
   end
 
   defp save_playlist(socket, :new, playlist_params) do
+    user_id = socket.assigns.playlist.user_id
+    playlist_params = Map.put(playlist_params, "user_id", user_id)
+
     case Playlists.create_playlist(playlist_params) do
       {:ok, playlist} ->
         notify_parent({:saved, playlist})
 
         {:noreply,
          socket
-         |> put_flash(:info, "Playlist created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+          |> put_flash(:info, "Playlist created successfully")
+          |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
+        Logger.error("Failed to create playlist: #{inspect(changeset.errors)}")
         {:noreply, assign(socket, form: to_form(changeset))}
     end
   end

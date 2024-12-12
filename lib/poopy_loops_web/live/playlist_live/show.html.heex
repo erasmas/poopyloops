@@ -19,7 +19,7 @@
   <ul class="mt-4 space-y-4">
     <%= for track <- @tracks do %>
       <li class="bg-white shadow p-4 rounded">
-        <p><strong>Added by:</strong> User <%= track.user_id %></p>
+        <p><strong>Added by:</strong> <%= track.user.email %></p>
         <p><strong>Added at:</strong> <%= track.added_at %></p>
         <%= if video_id = get_video_id(track.url) do %>
           <div class="mt-4">
