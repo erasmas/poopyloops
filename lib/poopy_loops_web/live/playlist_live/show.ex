@@ -10,7 +10,12 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     playlist = Playlists.get_playlist!(params["id"])
     tracks = PlaylistTracks.list_tracks(playlist.id)
 
-    {:ok, assign(socket, playlist: playlist, tracks: tracks, current_user: socket.assigns[:current_user])}
+    {:ok,
+     assign(socket,
+       playlist: playlist,
+       tracks: tracks,
+       current_user: socket.assigns[:current_user]
+     )}
   end
 
   @impl true
@@ -35,6 +40,20 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
 
       {:error, reason} ->
         {:noreply, put_flash(socket, :error, "Failed to add track: #{reason}")}
+    end
+  end
+
+  def handle_event("toggle_like", %{"track_id" => track_id, "like" => like}, socket) do
+    user_id = socket.assigns.current_user.id
+    like = String.to_existing_atom(like)
+
+    case PoopyLoops.PlaylistTracks.toggle_like(user_id, track_id, like) do
+      {:ok, _like} ->
+        updated_tracks = PoopyLoops.PlaylistTracks.list_tracks(socket.assigns.playlist.id)
+        {:noreply, assign(socket, tracks: updated_tracks)}
+
+      {:error, changeset} ->
+        {:noreply, put_flash(socket, :error, "Failed to toggle like.")}
     end
   end
 

@@ -7,7 +7,6 @@ defmodule PoopyLoops.Playlists.Playlist do
   schema "playlists" do
     field :name, :string
     belongs_to :user, PoopyLoops.Accounts.User
-
     timestamps(type: :utc_datetime)
   end
 

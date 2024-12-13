@@ -1,5 +1,5 @@
 <.header>
-  <%= @playlist.name %>
+  {@playlist.name}
   <:actions>
     <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Rename</.button>
@@ -8,8 +8,16 @@
 </.header>
 
 <form phx-submit="add_track" class="mt-6">
-  <label for="youtube_link" class="block text-sm font-medium text-gray-700">Add YouTube Link</label>
-  <input type="url" name="youtube_link" id="youtube_link" required class="mt-1 p-2 border rounded w-full">
+  <label for="youtube_link" class="block text-sm font-medium text-gray-700">
+    Add YouTube Link
+  </label>
+  <input
+    type="url"
+    name="youtube_link"
+    id="youtube_link"
+    required
+    class="mt-1 p-2 border rounded w-full"
+  />
   <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Add Track</button>
 </form>
 
@@ -19,8 +27,17 @@
   <ul class="mt-4 space-y-4">
     <%= for track <- @tracks do %>
       <li class="bg-white shadow p-4 rounded">
-        <p><strong>Added by:</strong> <%= track.user.email %></p>
-        <p><strong>Added at:</strong> <%= track.added_at %></p>
+        <p><strong>Added by:</strong> {track.user.email}</p>
+        <p><strong>Added at:</strong> {track.inserted_at}</p>
+        <div class="mt-2 flex space-x-4">
+          <button phx-click="toggle_like" phx-value-track-id={track.id} phx-value-like="true">
+            👍 ({track.likes || 0})
+          </button>
+
+          <button phx-click="toggle_like" phx-value-track-id={track.id} phx-value-like="false">
+            👎 ({track.dislikes || 0})
+          </button>
+        </div>
         <%= if video_id = get_video_id(track.url) do %>
           <div class="mt-4">
             <iframe
@@ -30,7 +47,8 @@
               title="YouTube video player"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen>
+              allowfullscreen
+            >
             </iframe>
           </div>
         <% else %>
@@ -43,7 +61,12 @@
 
 <.back navigate={~p"/playlists"}>Back to playlists</.back>
 
-<.modal :if={@live_action == :edit} id="playlist-modal" show on_cancel={JS.patch(~p"/playlists/#{@playlist}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="playlist-modal"
+  show
+  on_cancel={JS.patch(~p"/playlists/#{@playlist}")}
+>
   <.live_component
     module={PoopyLoopsWeb.PlaylistLive.FormComponent}
     id={@playlist.id}

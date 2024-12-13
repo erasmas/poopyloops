@@ -7,25 +7,27 @@ defmodule PoopyLoops.Playlists.PlaylistTrack do
 
   def youtube_regex, do: @youtube_regex
 
-
   @primary_key {:id, ULID, autogenerate: true}
   @foreign_key_type Ecto.ULID
   schema "playlist_tracks" do
-    field :added_at, :naive_datetime
     field :url, :string
     belongs_to :playlist, PoopyLoops.Playlists.Playlist
     belongs_to :user, PoopyLoops.Accounts.User
-
     timestamps(type: :utc_datetime)
+
+    has_many :playlist_track_likes, PoopyLoops.Playlists.TrackLike,
+      foreign_key: :playlist_track_id
+
+    field :likes, :integer, virtual: true
+    field :dislikes, :integer, virtual: true
   end
 
   @doc false
   def changeset(playlist_track, attrs) do
     playlist_track
-    |> cast(attrs, [:url, :added_at, :playlist_id, :user_id])
-    |> validate_required([:url, :added_at, :playlist_id, :user_id])
+    |> cast(attrs, [:url, :playlist_id, :user_id])
+    |> validate_required([:url, :playlist_id, :user_id])
     |> validate_format(:url, @youtube_regex, message: "Must be a valid YouTube URL")
-    |> put_change(:added_at, NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second))
     |> assoc_constraint(:user)
   end
 end
