@@ -7,34 +7,34 @@
   </:actions>
 </.header>
 
-<form phx-submit="add_track" class="mt-6">
-  <label for="youtube_link" class="block text-sm font-medium text-gray-700">
-    Add YouTube Link
-  </label>
-  <input
-    type="url"
-    name="youtube_link"
-    id="youtube_link"
-    required
-    class="mt-1 p-2 border rounded w-full"
-  />
-  <button type="submit" class="mt-2 bg-blue-500 text-white py-2 px-4 rounded">Add Track</button>
-</form>
+<div class="mt-5">
+  <form phx-submit="add_track" class="flex space-x-2">
+    <input
+      type="url"
+      name="youtube_link"
+      id="youtube_link"
+      required
+      class="border rounded w-full"
+      placeholder="Add a YouTube link"
+    />
+    <button type="submit" class="w-40 bg-blue-500 text-white rounded">Add Track</button>
+  </form>
+</div>
 
 <%= if @tracks == [] do %>
   <p>No tracks added yet.</p>
 <% else %>
-  <ul class="mt-4 space-y-4">
+  <ul class="mt-4 space-y-5">
     <%= for track <- @tracks do %>
       <li class="bg-white shadow p-4 rounded">
         <p><strong>Added by:</strong> {track.user.email}</p>
         <p><strong>Added at:</strong> {track.inserted_at}</p>
         <div class="mt-2 flex space-x-4">
-          <button phx-click="toggle_like" phx-value-track-id={track.id} phx-value-like="true">
+          <button phx-click="toggle_like" phx-value-track_id={track.id} phx-value-like="true">
             👍 ({track.likes || 0})
           </button>
 
-          <button phx-click="toggle_like" phx-value-track-id={track.id} phx-value-like="false">
+          <button phx-click="toggle_like" phx-value-track_id={track.id} phx-value-like="false">
             👎 ({track.dislikes || 0})
           </button>
         </div>

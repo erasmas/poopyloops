@@ -15,6 +15,7 @@ defmodule PoopyLoops.PlaylistTracks do
           likes: filter(count(tl.id), tl.like == true),
           dislikes: filter(count(tl.id), tl.like == false)
         },
+        # TODO: Order by likes desc
         preload: [:user]
     )
   end
