@@ -49,8 +49,12 @@ defmodule PoopyLoops.PlaylistTracks do
 
         {:ok, track}
 
-      error ->
-        error
+      {:error, %Ecto.Changeset{} = changeset} ->
+        if Keyword.has_key?(changeset.errors, :playlist_id) do
+          {:error, "This track is already in the playlist"}
+        else
+          {:error, inspect(changeset.errors)}
+        end
     end
   end
 

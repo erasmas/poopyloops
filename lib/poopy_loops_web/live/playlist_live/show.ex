@@ -60,6 +60,9 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
       {:ok, _track} ->
         {:noreply, socket}
 
+      {:error, :duplicate_track_in_playlist} ->
+        {:noreply, put_flash(socket, :error, "This track is already in the playlist")}
+
       {:error, reason} ->
         {:noreply, put_flash(socket, :error, "Failed to add track: #{reason}")}
     end

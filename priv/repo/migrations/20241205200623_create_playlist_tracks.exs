@@ -12,5 +12,9 @@ defmodule PoopyLoops.Repo.Migrations.CreatePlaylistTracks do
 
     create index(:playlist_tracks, [:playlist_id])
     create index(:playlist_tracks, [:user_id])
+
+    create unique_index(:playlist_tracks, [:playlist_id, :url],
+             name: :unique_track_in_playlist_idx
+           )
   end
 end

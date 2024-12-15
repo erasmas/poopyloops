@@ -29,5 +29,6 @@ defmodule PoopyLoops.Playlists.PlaylistTrack do
     |> validate_required([:url, :playlist_id, :user_id])
     |> validate_format(:url, @youtube_regex, message: "Must be a valid YouTube URL")
     |> assoc_constraint(:user)
+    |> unique_constraint([:playlist_id, :url], name: :unique_track_in_playlist_idx)
   end
 end
