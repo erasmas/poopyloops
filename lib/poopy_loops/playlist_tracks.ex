@@ -5,6 +5,10 @@ defmodule PoopyLoops.PlaylistTracks do
   alias PoopyLoops.Playlists.PlaylistTrack
   alias PoopyLoops.Playlists.TrackLike
 
+  @like_topic "playlist_track_likes_topic"
+
+  def like_topic(), do: @like_topic
+
   def list_tracks(playlist_id) do
     Repo.all(
       from pt in PlaylistTrack,
@@ -22,42 +26,97 @@ defmodule PoopyLoops.PlaylistTracks do
 
   def get_playlist_track!(id), do: Repo.get!(PlaylistTrack, id)
 
-  def add_track(playlist_id, youtube_link, user_id) do
-    %PlaylistTrack{}
-    |> PlaylistTrack.changeset(%{
-      playlist_id: playlist_id,
-      url: youtube_link,
-      user_id: user_id
-    })
-    |> Repo.insert()
+  def add_track(playlist_id, youtube_link, added_by_user) do
+    saved_track =
+      %PlaylistTrack{}
+      |> PlaylistTrack.changeset(%{
+        playlist_id: playlist_id,
+        url: youtube_link,
+        user_id: added_by_user.id
+      })
+      |> Repo.insert()
+
+    # |> Repo.preload(:user)
+
+    case saved_track do
+      {:ok, track} ->
+        # Broadcast the new track to the playlist topic
+        Phoenix.PubSub.broadcast(
+          PoopyLoops.PubSub,
+          "playlist:#{playlist_id}",
+          {:track_added, %{track | user: added_by_user}}
+        )
+
+        {:ok, track}
+
+      error ->
+        error
+    end
   end
 
-  def toggle_like(user_id, playlist_track_id, like) do
+  def toggle_like(user_id, track_id, like) do
     Repo.transaction(fn ->
-      # Fetch the existing like/dislike for this user and track
-      existing = Repo.get_by(TrackLike, playlist_track_id: playlist_track_id, user_id: user_id)
+      # Fetch existing like/dislike
+      existing = Repo.get_by(TrackLike, user_id: user_id, playlist_track_id: track_id)
 
-      cond do
-        # If the same like/dislike exists, delete it (toggle off)
-        existing && existing.like == like ->
+      case existing do
+        # If an existing like/dislike exists, remove it first
+        %TrackLike{like: _} ->
           Repo.delete!(existing)
 
-        # If there's an opposite reaction, update it
-        existing ->
-          existing
-          |> TrackLike.changeset(%{like: like})
-          |> Repo.update!()
-
-        # If no existing interaction, insert a new one
-        true ->
-          %TrackLike{}
-          |> TrackLike.changeset(%{
-            playlist_track_id: playlist_track_id,
+          broadcast_like_event(:track_like_removed, %{
+            track_id: track_id,
             user_id: user_id,
-            like: like
+            like: existing.like
           })
-          |> Repo.insert!()
+
+          # If the new like/dislike is different, insert it
+          if existing.like != like do
+            changeset =
+              %TrackLike{}
+              |> TrackLike.changeset(%{user_id: user_id, playlist_track_id: track_id, like: like})
+
+            case Repo.insert(changeset) do
+              {:ok, new_like} ->
+                broadcast_like_event(:track_like_updated, %{
+                  track_id: new_like.playlist_track_id,
+                  user_id: new_like.user_id,
+                  like: new_like.like
+                })
+
+                {:ok, :updated}
+
+              {:error, changeset} ->
+                {:error, changeset}
+            end
+          else
+            {:ok, :removed}
+          end
+
+        # If no existing like/dislike, insert a new one
+        nil ->
+          changeset =
+            %TrackLike{}
+            |> TrackLike.changeset(%{user_id: user_id, playlist_track_id: track_id, like: like})
+
+          case Repo.insert(changeset) do
+            {:ok, new_like} ->
+              broadcast_like_event(:track_like_updated, %{
+                track_id: new_like.playlist_track_id,
+                user_id: new_like.user_id,
+                like: new_like.like
+              })
+
+              {:ok, :updated}
+
+            {:error, changeset} ->
+              {:error, changeset}
+          end
       end
     end)
+  end
+
+  defp broadcast_like_event(event_type, payload) do
+    Phoenix.PubSub.broadcast(PoopyLoops.PubSub, @like_topic, {event_type, payload})
   end
 end

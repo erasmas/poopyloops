@@ -6,16 +6,41 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   alias PoopyLoops.Playlists.PlaylistTrack
 
   @impl true
-  def mount(params, _session, socket) do
-    playlist = Playlists.get_playlist!(params["id"])
-    tracks = PlaylistTracks.list_tracks(playlist.id)
+  def mount(%{"id" => playlist_id}, _session, socket) do
+    if connected?(socket) do
+      Phoenix.PubSub.subscribe(PoopyLoops.PubSub, "playlist:#{playlist_id}")
+      Phoenix.PubSub.subscribe(PoopyLoops.PubSub, PlaylistTracks.like_topic())
+    end
+
+    playlist = Playlists.get_playlist!(playlist_id)
+
+    tracks_by_id =
+      PlaylistTracks.list_tracks(playlist.id) |> Enum.into(%{}, fn track -> {track.id, track} end)
 
     {:ok,
      assign(socket,
        playlist: playlist,
-       tracks: tracks,
-       current_user: socket.assigns[:current_user]
+       current_user: socket.assigns[:current_user],
+       tracks_by_id: tracks_by_id
      )}
+  end
+
+  @impl true
+  def handle_info({:track_added, track}, socket) do
+    {:noreply,
+     assign(socket, tracks_by_id: Map.put(socket.assigns.tracks_by_id, track.id, track))}
+  end
+
+  @impl true
+  def handle_info({:track_like_updated, %{track_id: track_id, like: like}}, socket) do
+    updated_tracks = update_like_in_tracks(socket.assigns.tracks_by_id, track_id, like)
+    {:noreply, assign(socket, tracks_by_id: updated_tracks)}
+  end
+
+  @impl true
+  def handle_info({:track_like_removed, %{track_id: track_id, like: like}}, socket) do
+    updated_tracks = remove_like_in_tracks(socket.assigns.tracks_by_id, track_id, like)
+    {:noreply, assign(socket, tracks_by_id: updated_tracks)}
   end
 
   @impl true
@@ -31,10 +56,9 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     playlist_id = socket.assigns.playlist.id
     current_user = socket.assigns.current_user
 
-    case PlaylistTracks.add_track(playlist_id, youtube_link, current_user.id) do
+    case PlaylistTracks.add_track(playlist_id, youtube_link, current_user) do
       {:ok, _track} ->
-        updated_tracks = PlaylistTracks.list_tracks(playlist_id)
-        {:noreply, assign(socket, tracks: updated_tracks)}
+        {:noreply, socket}
 
       {:error, reason} ->
         {:noreply, put_flash(socket, :error, "Failed to add track: #{reason}")}
@@ -47,13 +71,32 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     like = String.to_existing_atom(like)
 
     case PlaylistTracks.toggle_like(user_id, track_id, like) do
-      {:ok, _like} ->
-        updated_tracks = PoopyLoops.PlaylistTracks.list_tracks(socket.assigns.playlist.id)
-        {:noreply, assign(socket, tracks: updated_tracks)}
+      {:ok, _} ->
+        {:noreply, socket}
 
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to toggle like.")}
     end
+  end
+
+  defp update_like_in_tracks(tracks_by_id, track_id, like) do
+    Map.update!(tracks_by_id, track_id, fn track ->
+      if like do
+        %{track | likes: track.likes + 1}
+      else
+        %{track | dislikes: track.dislikes + 1}
+      end
+    end)
+  end
+
+  defp remove_like_in_tracks(tracks_by_id, track_id, like) do
+    Map.update!(tracks_by_id, track_id, fn track ->
+      if like do
+        %{track | likes: track.likes - 1}
+      else
+        %{track | dislikes: track.dislikes - 1}
+      end
+    end)
   end
 
   def get_video_id(url) do
