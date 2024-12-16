@@ -36,8 +36,6 @@ defmodule PoopyLoops.PlaylistTracks do
       })
       |> Repo.insert()
 
-    # |> Repo.preload(:user)
-
     case saved_track do
       {:ok, track} ->
         # Broadcast the new track to the playlist topic

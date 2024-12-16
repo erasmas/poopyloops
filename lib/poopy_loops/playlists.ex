@@ -10,15 +10,24 @@ defmodule PoopyLoops.Playlists do
 
   @doc """
   Returns the list of playlists.
-
-  ## Examples
-
-      iex> list_playlists()
-      [%Playlist{}, ...]
-
   """
   def list_playlists do
     Repo.all(Playlist)
+  end
+
+  @doc """
+  Returns the list of playlists that either the user created or contain a track liked by the user.
+  """
+  def list_user_playlists(user_id) do
+    Repo.all(
+      from p in PoopyLoops.Playlists.Playlist,
+        left_join: pt in PoopyLoops.Playlists.PlaylistTrack,
+        on: pt.playlist_id == p.id,
+        left_join: tl in PoopyLoops.Playlists.TrackLike,
+        on: tl.playlist_track_id == pt.id and tl.user_id == ^user_id,
+        where: p.user_id == ^user_id or not is_nil(tl.id),
+        distinct: p.id
+    )
   end
 
   @doc """

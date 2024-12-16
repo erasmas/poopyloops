@@ -6,9 +6,11 @@ defmodule PoopyLoopsWeb.PlaylistLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, 
-      socket
-      |> stream(:playlists, Playlists.list_playlists())}
+    user_id = socket.assigns.current_user.id
+
+    {:ok,
+     socket
+     |> stream(:playlists, Playlists.list_user_playlists(user_id))}
   end
 
   @impl true
@@ -46,5 +48,4 @@ defmodule PoopyLoopsWeb.PlaylistLive.Index do
 
     {:noreply, stream_delete(socket, :playlists, playlist)}
   end
-
 end
