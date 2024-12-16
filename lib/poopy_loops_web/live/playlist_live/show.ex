@@ -13,34 +13,32 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     end
 
     playlist = Playlists.get_playlist!(playlist_id)
-
-    tracks_by_id =
-      PlaylistTracks.list_tracks(playlist.id) |> Enum.into(%{}, fn track -> {track.id, track} end)
+    tracks = PlaylistTracks.list_tracks(playlist.id)
 
     {:ok,
      assign(socket,
        playlist: playlist,
        current_user: socket.assigns[:current_user],
-       tracks_by_id: tracks_by_id
+       tracks: tracks
      )}
   end
 
   @impl true
   def handle_info({:track_added, track}, socket) do
-    {:noreply,
-     assign(socket, tracks_by_id: Map.put(socket.assigns.tracks_by_id, track.id, track))}
+    updated_tracks = [track | socket.assigns.tracks]
+    {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
   @impl true
   def handle_info({:track_like_updated, %{track_id: track_id, like: like}}, socket) do
-    updated_tracks = update_like_in_tracks(socket.assigns.tracks_by_id, track_id, like)
-    {:noreply, assign(socket, tracks_by_id: updated_tracks)}
+    updated_tracks = update_like_in_tracks(socket.assigns.tracks, track_id, like)
+    {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
   @impl true
   def handle_info({:track_like_removed, %{track_id: track_id, like: like}}, socket) do
-    updated_tracks = remove_like_in_tracks(socket.assigns.tracks_by_id, track_id, like)
-    {:noreply, assign(socket, tracks_by_id: updated_tracks)}
+    updated_tracks = remove_like_in_tracks(socket.assigns.tracks, track_id, like)
+    {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
   @impl true
@@ -82,22 +80,30 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     end
   end
 
-  defp update_like_in_tracks(tracks_by_id, track_id, like) do
-    Map.update!(tracks_by_id, track_id, fn track ->
-      if like do
-        %{track | likes: track.likes + 1}
+  defp update_like_in_tracks(tracks, track_id, like) do
+    Enum.map(tracks, fn track ->
+      if track.id == track_id do
+        if like do
+          %{track | likes: track.likes + 1}
+        else
+          %{track | dislikes: track.dislikes + 1}
+        end
       else
-        %{track | dislikes: track.dislikes + 1}
+        track
       end
     end)
   end
 
-  defp remove_like_in_tracks(tracks_by_id, track_id, like) do
-    Map.update!(tracks_by_id, track_id, fn track ->
-      if like do
-        %{track | likes: track.likes - 1}
+  defp remove_like_in_tracks(tracks, track_id, like) do
+    Enum.map(tracks, fn track ->
+      if track.id == track_id do
+        if like do
+          %{track | likes: track.likes - 1}
+        else
+          %{track | dislikes: track.dislikes - 1}
+        end
       else
-        %{track | dislikes: track.dislikes - 1}
+        track
       end
     end)
   end

@@ -42,7 +42,7 @@ defmodule PoopyLoops.PlaylistTracks do
         Phoenix.PubSub.broadcast(
           PoopyLoops.PubSub,
           "playlist:#{playlist_id}",
-          {:track_added, %{track | user: added_by_user}}
+          {:track_added, %{track | user: added_by_user, likes: 0, dislikes: 0}}
         )
 
         {:ok, track}

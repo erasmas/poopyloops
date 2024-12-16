@@ -21,18 +21,16 @@
   </form>
 </div>
 
-<%= if map_size(@tracks_by_id) == 0 do %>
-  <p>No tracks added yet.</p>
-<% else %>
+<div id="tracks">
   <ul class="mt-4 space-y-5">
-    <%= for {track_id, track} <- @tracks_by_id do %>
-      <li class="bg-white shadow p-4 rounded">
+    <%= for track <- @tracks |> Enum.sort_by(fn track -> {-track.likes, track.dislikes} end) do %>
+      <li id={track.id} class="bg-white shadow p-4 rounded">
         <p><strong>Added by:</strong> {track.user.email}</p>
         <p><strong>Added at:</strong> {track.inserted_at}</p>
         <div class="mt-2 flex space-x-6 items-center">
           <button
             phx-click="toggle_like"
-            phx-value-track_id={track_id}
+            phx-value-track_id={track.id}
             phx-value-like="true"
             class="flex items-center space-x-2 text-gray-700 hover:text-blue-500"
           >
@@ -84,7 +82,7 @@
       </li>
     <% end %>
   </ul>
-<% end %>
+</div>
 
 <.back navigate={~p"/playlists"}>Back to playlists</.back>
 
