@@ -13,7 +13,8 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     end
 
     playlist = Playlists.get_playlist!(playlist_id)
-    tracks = PlaylistTracks.list_tracks(playlist.id)
+    current_user = socket.assigns.current_user
+    tracks = PlaylistTracks.list_tracks(playlist.id, current_user.id)
 
     {:ok,
      assign(socket,

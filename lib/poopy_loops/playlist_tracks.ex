@@ -9,17 +9,29 @@ defmodule PoopyLoops.PlaylistTracks do
 
   def like_topic(), do: @like_topic
 
-  def list_tracks(playlist_id) do
+  def list_tracks(playlist_id, user_id) do
     Repo.all(
       from pt in PlaylistTrack,
         where: pt.playlist_id == ^playlist_id,
         left_join: tl in assoc(pt, :playlist_track_likes),
+        left_join: user_like in PoopyLoops.Playlists.TrackLike,
+        on: user_like.playlist_track_id == pt.id and user_like.user_id == ^user_id,
         group_by: pt.id,
         select_merge: %{
           likes: filter(count(tl.id), tl.like == true),
-          dislikes: filter(count(tl.id), tl.like == false)
+          dislikes: filter(count(tl.id), tl.like == false),
+          track_liked:
+            coalesce(
+              fragment("MAX(CASE WHEN ? THEN 1 ELSE 0 END) = 1", user_like.like == true),
+              false
+            ),
+          track_disliked:
+            coalesce(
+              fragment("MAX(CASE WHEN ? THEN 1 ELSE 0 END) = 1", user_like.like == false),
+              false
+            )
         },
-        # TODO: Order by likes desc
+        order_by: [desc: count(tl.id, :distinct)],
         preload: [:user]
     )
   end
@@ -49,7 +61,7 @@ defmodule PoopyLoops.PlaylistTracks do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         if Keyword.has_key?(changeset.errors, :playlist_id) do
-          {:error, "This track is already in the playlist"}
+          {:error, :duplicate_track_in_playlist}
         else
           {:error, inspect(changeset.errors)}
         end

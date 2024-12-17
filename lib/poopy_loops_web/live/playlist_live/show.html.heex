@@ -32,7 +32,10 @@
             phx-click="toggle_like"
             phx-value-track_id={track.id}
             phx-value-like="true"
-            class="flex items-center space-x-2 text-gray-700 hover:text-blue-500"
+            class={
+              "flex items-center space-x-2 " <>
+              if track.track_liked, do: "text-blue-500", else: "text-gray-700 hover:text-blue-500"
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +52,10 @@
             phx-click="toggle_like"
             phx-value-track_id={track.id}
             phx-value-like="false"
-            class="flex items-center space-x-2 text-gray-700 hover:text-red-500"
+            class={
+              "flex items-center space-x-2 " <>
+              if track.track_disliked, do: "text-red-500", else: "text-gray-700"
+            }
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
