@@ -3,7 +3,7 @@ defmodule PoopyLoops.Playlists.PlaylistTrack do
   import Ecto.Changeset
   alias Ecto.ULID
 
-  @youtube_regex ~r/https:\/\/(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/
+  @youtube_regex ~r/(?:https:\/\/www\.youtube\.com\/watch\?v=|https:\/\/youtu\.be\/)([a-zA-Z0-9_-]+)/
 
   def youtube_regex, do: @youtube_regex
 
@@ -20,6 +20,8 @@ defmodule PoopyLoops.Playlists.PlaylistTrack do
 
     field :likes, :integer, virtual: true
     field :dislikes, :integer, virtual: true
+    field :track_liked, :boolean, virtual: true
+    field :track_disliked, :boolean, virtual: true
   end
 
   @doc false
