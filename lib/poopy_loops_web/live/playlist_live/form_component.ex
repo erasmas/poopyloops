@@ -10,8 +10,7 @@ defmodule PoopyLoopsWeb.PlaylistLive.FormComponent do
     ~H"""
     <div>
       <.header>
-        <%= @title %>
-        <:subtitle>Use this form to manage playlist records in your database.</:subtitle>
+        {@title}
       </.header>
 
       <.simple_form
@@ -75,8 +74,8 @@ defmodule PoopyLoopsWeb.PlaylistLive.FormComponent do
 
         {:noreply,
          socket
-          |> put_flash(:info, "Playlist created successfully")
-          |> push_patch(to: socket.assigns.patch)}
+         |> put_flash(:info, "Playlist created successfully")
+         |> push_patch(to: socket.assigns.patch)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         Logger.error("Failed to create playlist: #{inspect(changeset.errors)}")

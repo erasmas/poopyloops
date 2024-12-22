@@ -20,7 +20,13 @@ defmodule PoopyLoopsWeb.Router do
   scope "/", PoopyLoopsWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    get "/", RedirectController, :redirect_to_playlists
+  end
+
+  scope "/auth/google", PoopyLoopsWeb do
+    pipe_through [:browser]
+    get "/", GoogleAuthController, :request
+    get "/callback", GoogleAuthController, :callback
   end
 
   # Other scopes may use custom stacks.
@@ -52,10 +58,6 @@ defmodule PoopyLoopsWeb.Router do
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{PoopyLoopsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-      live "/users/register", UserRegistrationLive, :new
-      live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -67,7 +69,7 @@ defmodule PoopyLoopsWeb.Router do
     live_session :require_authenticated_user,
       on_mount: [{PoopyLoopsWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
-      live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      # live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
 
       live "/playlists", PlaylistLive.Index, :index
       live "/playlists/new", PlaylistLive.Index, :new

@@ -19,7 +19,7 @@ defmodule PoopyLoopsWeb.PlaylistLiveTest do
     test "lists all playlists", %{conn: conn, playlist: playlist} do
       {:ok, _index_live, html} = live(conn, ~p"/playlists")
 
-      assert html =~ "Listing Playlists"
+      assert html =~ "Playlists"
       assert html =~ playlist.name
     end
 

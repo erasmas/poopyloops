@@ -32,7 +32,7 @@ defmodule PoopyLoopsWeb.PlaylistLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Playlists")
+    |> assign(:page_title, "Playlists")
     |> assign(:playlist, nil)
   end
 

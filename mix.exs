@@ -60,7 +60,11 @@ defmodule PoopyLoops.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:assent, "~> 0.2.10"}
+
+      # OAuth
+      {:assent, "~> 0.2.10"},
+      {:ssl_verify_fun, "~> 1.1"},
+      {:certifi, "~> 2.4"}
     ]
   end
 
