@@ -48,13 +48,15 @@ jobs:
           VERSION=$(mix eval 'IO.puts(Mix.Project.config()[:version])')
           echo "version=$VERSION" >> $GITHUB_ENV
 
-      - name: Package release
+      - name: Package Release
         run: |
-          tar -czvf poopyloops-${{ env.version }}.tar.gz -C _build/prod/rel/poopy_loops .
+          ARCHIVE_PATH="poopyloops-${{ env.version }}.tar.gz"
+          tar -czvf $ARCHIVE_PATH -C _build/prod/rel/poopy_loops .
+          echo "archive_path=$ARCHIVE_PATH" >> $GITHUB_ENV
 
-      # Step 8: Upload release tarball as an artifact
       - name: Upload Release Artifact
         uses: actions/upload-artifact@v3
         with:
           name: poopyloops-release
-          path: release_archive/poopyloops.tar.gz
+          if-no-files-found: error
+          path: ${{ env.archive_path }}
