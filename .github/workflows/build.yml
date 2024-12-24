@@ -45,7 +45,7 @@ jobs:
       - name: Extract Version
         id: extract_version
         run: |
-          VERSION=$(mix run -e 'IO.puts(Mix.Project.config()[:version])')
+          VERSION=$(mix eval 'IO.puts(Mix.Project.config()[:version])')
           echo "version=$VERSION" >> $GITHUB_ENV
 
       - name: Package release
