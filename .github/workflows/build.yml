@@ -21,15 +21,40 @@ jobs:
         with:
           elixir-version: "1.17.0" # [Required] Define the Elixir version
           otp-version: "27" # [Required] Define the Erlang/OTP version
+
       - name: Restore dependencies cache
         uses: actions/cache@v3
         with:
           path: deps
           key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
           restore-keys: ${{ runner.os }}-mix-
+
       - name: Install dependencies
         run: mix deps.get
 
       # TODO: Enable tests
       # - name: Run tests
       #   run: mix test
+
+      - name: Build release
+        run: |
+          mix assets.deploy
+          mix phx.digest
+          MIX_ENV=prod mix release
+
+      - name: Extract Version
+        id: extract_version
+        run: |
+          VERSION=$(mix run -e 'IO.puts(Mix.Project.config()[:version])')
+          echo "version=$VERSION" >> $GITHUB_ENV
+
+      - name: Package release
+        run: |
+          tar -czvf poopyloops-${{ env.version }}.tar.gz -C _build/prod/rel/poopy_loops .
+
+      # Step 8: Upload release tarball as an artifact
+      - name: Upload Release Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: poopyloops-release
+          path: release_archive/poopyloops.tar.gz
