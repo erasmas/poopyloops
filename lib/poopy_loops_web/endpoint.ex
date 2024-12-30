@@ -22,7 +22,7 @@ defmodule PoopyLoopsWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :poopy_loops,
-    gzip: false,
+    gzip: true,
     only: PoopyLoopsWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
