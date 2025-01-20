@@ -2,63 +2,77 @@
   <div class="flex flex-col gap-2">
     <div class="text-bodytextweak text-xl font-normal">плейлист</div>
     <div class="flex flex-row gap-2">
-      <a class="flex has-icon icon-button p-1 w-10 h-10" navigate={~p"/playlists"}>
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
+      <div class="has-tooltip">
+        <span class="tooltip rounded-xl px-4 py-2 bg-tooltipbackground font-normal opacity-90 text-white -mt-14 border-2 border-bodytextstrong">
+          Back to Playlist
+        </span>
+        <a
+          class="flex has-icon icon-button p-1 w-10 h-10"
+          data-tooltip-target="tooltip-default"
+          navigate={~p"/playlists"}
         >
-          <path
-            d="M2.58831 9C4.49547 7.76344 5.87407 6.78276 7.3999 5.97593C6.07097 4.6825 4.55438 3.64917 2.58831 3C2.3059 5.34353 2.37036 6.65671 2.58831 9Z"
-            stroke="#97996C"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M13.7998 5.79997C18.0177 5.56868 20.5605 6.01949 25.1998 5.79997"
-            stroke="#97996C"
-            stroke-width="4"
-            stroke-linecap="round"
-          />
-          <path
-            d="M2.7998 15.4679C6.64327 14.9914 20.0428 15.8159 25.1998 15.4679"
-            stroke="#97996C"
-            stroke-width="4"
-            stroke-linecap="round"
-          />
-          <path
-            d="M2.7998 24.2681C7.45501 23.7465 20.8536 24.2917 25.1998 24.2681"
-            stroke="#97996C"
-            stroke-width="4"
-            stroke-linecap="round"
-          />
-        </svg>
-      </a>
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 28 28"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.58831 9C4.49547 7.76344 5.87407 6.78276 7.3999 5.97593C6.07097 4.6825 4.55438 3.64917 2.58831 3C2.3059 5.34353 2.37036 6.65671 2.58831 9Z"
+              stroke="#97996C"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M13.7998 5.79997C18.0177 5.56868 20.5605 6.01949 25.1998 5.79997"
+              stroke="#97996C"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <path
+              d="M2.7998 15.4679C6.64327 14.9914 20.0428 15.8159 25.1998 15.4679"
+              stroke="#97996C"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <path
+              d="M2.7998 24.2681C7.45501 23.7465 20.8536 24.2917 25.1998 24.2681"
+              stroke="#97996C"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </a>
+      </div>
       <div class="text-4xl text-bodytextstrong">{@playlist.name}</div>
     </div>
   </div>
   <:actions>
-    <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
-      <a href="#" class="flex has-icon icon-button p-1 w-10 h-10">
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M10.6966 27.9437C8.21989 25.1154 6.82817 23.5373 4.05274 21.2999M10.6966 27.9437C7.57005 29.0512 5.69371 29.5279 2.90206 29.9894C2.37761 30.0761 1.92526 29.6196 2.01607 29.0958C2.51859 26.1976 3.00388 24.3268 4.05274 21.2999M10.6966 27.9437C16.8872 21.5351 20.3942 18.0064 26.7525 11.8878M4.05274 21.2999C10.0599 14.7658 13.5257 11.2014 20.1086 5.24399M20.1086 5.24399C21.2751 4.16134 22.0283 3.41088 22.9206 2.48358C23.5134 1.86752 24.4909 1.83109 25.1048 2.42606C26.7041 3.97587 27.8935 5.30303 29.5367 6.94366C30.1378 7.54378 30.1745 8.51558 29.5916 9.13333C28.7442 10.0313 27.9807 10.7794 26.7525 11.8878M20.1086 5.24399C22.8695 7.66856 24.088 9.35639 26.7525 11.8878"
-            stroke="#81835C"
-            stroke-opacity="0.64"
-            stroke-width="3"
-          />
-        </svg>
-      </a>
-    </.link>
+    <div class="has-tooltip">
+      <span class="tooltip rounded-xl px-4 py-2 bg-tooltipbackground font-normal opacity-90 text-white -mt-14 border-2 border-bodytextstrong">
+        Edit
+      </span>
+      <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
+        <a href="#" class="flex has-icon icon-button p-1 w-10 h-10 self-end">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.6966 27.9437C8.21989 25.1154 6.82817 23.5373 4.05274 21.2999M10.6966 27.9437C7.57005 29.0512 5.69371 29.5279 2.90206 29.9894C2.37761 30.0761 1.92526 29.6196 2.01607 29.0958C2.51859 26.1976 3.00388 24.3268 4.05274 21.2999M10.6966 27.9437C16.8872 21.5351 20.3942 18.0064 26.7525 11.8878M4.05274 21.2999C10.0599 14.7658 13.5257 11.2014 20.1086 5.24399M20.1086 5.24399C21.2751 4.16134 22.0283 3.41088 22.9206 2.48358C23.5134 1.86752 24.4909 1.83109 25.1048 2.42606C26.7041 3.97587 27.8935 5.30303 29.5367 6.94366C30.1378 7.54378 30.1745 8.51558 29.5916 9.13333C28.7442 10.0313 27.9807 10.7794 26.7525 11.8878M20.1086 5.24399C22.8695 7.66856 24.088 9.35639 26.7525 11.8878"
+              stroke="#81835C"
+              stroke-opacity="0.64"
+              stroke-width="3"
+            />
+          </svg>
+        </a>
+      </.link>
+    </div>
   </:actions>
 </.header>
 
@@ -107,7 +121,7 @@
           <div class="flex gap-8 items-center">
             <a
               href="#"
-              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
+              class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg
                 width="25"
@@ -127,7 +141,7 @@
             </a>
             <a
               href="#"
-              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
+              class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg
                 width="23"
@@ -159,7 +173,7 @@
             </a>
             <a
               href="#"
-              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
+              class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg
                 width="26"
@@ -197,19 +211,26 @@
               phx-value-track_id={track.id}
               phx-value-like="true"
               class={
-                  "flex w-full border border-strokestrong p-4 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
-                  if track.track_liked, do: "text-blue-500", else: "text-gray-700 hover:text-blue-500"
+                  "flex w-full border border-strokestrong p-3 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
+                  if track.track_liked, do: "text-headertextstrong bg-accent border-accent", else: "text-bodytextstrong hover:text-white hover:bg-accent hover:border-accent"
                 }
             >
               <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-6 h-6"
               >
-                <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
+                <path
+                  d="M27.7548 16.7213C34.9279 6.89851 23.0327 -2.92462 16 7.3894C6.95782 -3.41581 -2.35651 8.34969 4.14463 16.7213C9.25662 23.3041 14.0936 27.6342 16 29C17.6118 28.1258 21.9219 24.7088 27.7548 16.7213Z"
+                  stroke="#6F704F"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
-              <span class="text-md font-semibold">{track.likes || 0}</span>
+              <span class="text-xl text-normal">{track.likes || 0}</span>
             </button>
 
             <button
@@ -217,19 +238,41 @@
               phx-value-track_id={track.id}
               phx-value-like="false"
               class={
-                  "flex w-full border border-strokestrong p-4 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
-                  if track.track_disliked, do: "text-red-500", else: "text-gray-700"
+                  "flex w-full border border-strokestrong p-3 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
+                  if track.track_disliked, do: "text-white bg-poop border-poop", else: "text-bodytextstrong hover:text-white hover:bg-poop hover:border-poop"
                 }
             >
               <svg
+                width="32"
+                height="32"
+                viewBox="0 0 32 32"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="w-6 h-6"
               >
-                <path d="M15.73 5.5h1.035A7.465 7.465 0 0 1 18 9.625a7.465 7.465 0 0 1-1.235 4.125h-.148c-.806 0-1.534.446-2.031 1.08a9.04 9.04 0 0 1-2.861 2.4c-.723.384-1.35.956-1.653 1.715a4.499 4.499 0 0 0-.322 1.672v.633A.75.75 0 0 1 9 22a2.25 2.25 0 0 1-2.25-2.25c0-1.152.26-2.243.723-3.218.266-.558-.107-1.282-.725-1.282H3.622c-1.026 0-1.945-.694-2.054-1.715A12.137 12.137 0 0 1 1.5 12.25c0-2.848.992-5.464 2.649-7.521C4.537 4.247 5.136 4 5.754 4H9.77a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23ZM21.669 14.023c.536-1.362.831-2.845.831-4.398 0-1.22-.182-2.398-.52-3.507-.26-.85-1.084-1.368-1.973-1.368H19.1c-.445 0-.72.498-.523.898.591 1.2.924 2.55.924 3.977a8.958 8.958 0 0 1-1.302 4.666c-.245.403.028.959.5.959h1.053c.832 0 1.612-.453 1.918-1.227Z" />
+                <path
+                  d="M13.4006 27.6668C23.3669 29.9667 29.5 28.4334 29.5 24.6002C29.5 21.5337 27.4556 20.767 26.4334 20.767M13.4006 27.6668C20.4916 26.843 25.3917 23.7496 26.4334 20.767M13.4006 27.6668C11.3562 28.4334 5.27425 28.1268 3.43432 26.9001C1.13441 25.3669 3.43432 20.767 6.50087 20.767M26.4334 20.767C26.9445 17.956 26.4334 15.4014 24.1336 15.4006C24.9002 12.334 21.067 9.26822 20.3004 10.8015M6.50087 20.767C4.20098 18.4679 7.26753 15.4013 8.8008 15.4013C6.96087 11.1083 12.634 9.26806 13.4006 3.13525C15.445 2.87971 19.6871 4.05519 20.3004 10.8015M6.50087 20.767C7.30129 20.767 8.62405 20.6103 10.2101 20.3242M20.3004 10.8015C19.8791 11.6441 16.9112 12.9497 14.0683 13.955M14.1673 19.4598C15.4745 19.1274 16.8153 18.7399 18.0965 18.3071M11 23C11 22.5527 21.7666 21.9432 21 23C20.2334 24.0568 18 24.75 16 24.75C13.5468 24.75 11 23.7666 11 23ZM11.8675 13.1013C14.934 13.1013 14.934 16.1679 14.934 16.9345C14.934 17.7012 14.1674 20.7677 11.8675 20.7677C9.56757 20.7677 8.80093 18.4678 8.80093 16.9345C8.80093 15.4013 9.56757 13.1013 11.8675 13.1013ZM21.0669 20.7676C18.0004 20.7676 18.0004 17.7011 18.0004 16.9344C18.0004 16.1678 18.767 13.1012 21.0669 13.1012C23.3668 13.1012 24.1335 15.4011 24.1335 16.9344C24.1335 18.4677 23.3668 20.7676 21.0669 20.7676Z"
+                  stroke="#6F704F"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M11.3999 17.1423C11.3999 16.342 12.1199 16.2621 12.1199 17.1421M11.3999 17.1423C11.3999 18.1022 12.1199 18.0222 12.1199 17.1421M11.3999 17.1423L12.1199 17.1421"
+                  stroke="#6F704F"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M21.3999 17.3316C21.3999 18.1799 20.6799 18.2646 20.6799 17.3318M21.3999 17.3316C21.3999 16.3142 20.6799 16.399 20.6799 17.3318M21.3999 17.3316L20.6799 17.3318"
+                  stroke="#6F704F"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
-              <span class="text-md font-semibold">{track.dislikes || 0}</span>
+
+              <span class="text-xl text-normal">{track.dislikes || 0}</span>
             </button>
           </div>
         <% else %>

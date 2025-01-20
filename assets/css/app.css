@@ -49,27 +49,22 @@
 }
 
 .icon-button {
-    color: #adb07c;
-    transition: all 128ms linear;
-}
-
-.icon-button:hover {
-    color: #81835c;
-}
-
-.icon-button:active {
-    color: #53543b;
-}
-
-.option-button {
     color: #83855e;
     transition: all 128ms linear;
 }
 
-.option-button:hover {
+.icon-button:hover {
     color: #5b5c41;
 }
 
-.option-button:active {
+.icon-button:active {
     color: #323324;
+}
+
+.tooltip {
+    @apply invisible absolute;
+}
+
+.has-tooltip:hover .tooltip {
+    @apply visible z-50;
 }
