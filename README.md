@@ -9,6 +9,13 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+
+# Run locally
+
+## Run postgres in Docker
+
+`docker-compose up`
+
 ## Learn more
 
   * Official website: https://www.phoenixframework.org/
