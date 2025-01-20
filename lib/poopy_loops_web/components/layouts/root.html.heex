@@ -12,12 +12,15 @@
     <%!-- Google DynaPuff Font --%>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
 
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-poopylime">
+  <body class="bg-backgroundmain">
     <%!-- <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
@@ -25,54 +28,29 @@
         </li>
       <% end %>
     </ul> --%>
-    <div class="w-full h-20 p-2.5 bg-poopyheader flex justify-center items-center">
-      <div class="h-[45px] w-full max-w-screen-xl flex justify-between items-center px-4">
+    <div class="w-full h-20 p-2.5 bg-accent flex justify-center items-center">
+      <div class="h-[45px] w-full max-w-screen-xl flex justify-between items-center">
         <div class="flex items-center gap-3">
           <!-- Logo -->
-          <div class="w-[37.62px] h-9 relative">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="41"
-              height="38"
-              fill="none"
-              viewBox="0 0 41 38"
-            >
-              <path
-                fill="#0B3D2A"
-                fill-rule="evenodd"
-                d="M18.187 35.983c13.886 3.229 22.431 1.076 22.431-4.305 0-4.305-2.848-5.381-4.273-5.381.713-3.946 0-7.533-3.204-7.534 1.068-4.305-4.272-8.609-5.34-6.456-.855-9.471-6.765-11.121-9.614-10.762-.495 3.993-2.462 6.69-4.172 9.036-1.976 2.71-3.61 4.952-2.236 8.183-2.137 0-6.41 4.305-3.205 7.533-4.272 0-7.477 6.457-4.272 8.61 2.563 1.722 11.037 2.152 13.885 1.076Z"
-                clip-rule="evenodd"
-              />
-              <path
-                fill="#fff"
-                d="m10.928 27 9 4.5 9.643-1.929V19.93l-1.928-6.43-3.857-1.286-12.858 1.929V27Z"
-              />
-              <path
-                fill="#BA643D"
-                fill-rule="evenodd"
-                d="M37.618 30.178c0 5.381-8.545 7.534-22.43 4.305-2.849 1.076-11.323.646-13.886-1.076-3.205-2.153 0-8.61 4.272-8.61-3.204-3.228 1.068-7.533 3.205-7.533-1.375-3.23.26-5.472 2.236-8.183 1.71-2.346 3.677-5.043 4.172-9.036 2.849-.36 8.759 1.291 9.614 10.762 1.068-2.153 6.408 2.151 5.34 6.456 3.205.001 3.917 3.588 3.205 7.534 1.424 0 4.272 1.076 4.272 5.381Zm-19.82-11.571a3.236 3.236 0 1 1-6.472 0 3.236 3.236 0 0 1 6.472 0Zm5.663 1.213a3.236 3.236 0 1 0 0-6.472 3.236 3.236 0 0 0 0 6.472Z"
-                clip-rule="evenodd"
-              />
-              <circle cx="14.157" cy="19.416" r="1.213" fill="#0B3D2A" />
-              <circle cx="24.27" cy="16.584" r="1.213" fill="#0B3D2A" />
-              <path
-                fill="#0B3D2A"
-                fill-rule="evenodd"
-                d="M23.214 23.246a1.213 1.213 0 0 1 1.675.372c.634.996.529 2.178.18 3.114a5.726 5.726 0 0 1-1.92 2.53c-.885.66-2.037 1.101-3.31.964-1.29-.14-2.522-.852-3.587-2.154a1.213 1.213 0 1 1 1.878-1.537c.755.922 1.445 1.221 1.97 1.278.54.058 1.094-.12 1.599-.497.512-.381.904-.92 1.096-1.433.2-.536.12-.846.046-.962a1.213 1.213 0 0 1 .373-1.675Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </div>
-          <div class="text-white text-32px font-bold font-['DynaPuff'] tracking-[2.56px]">
-            POOPY LOOPS
+          <div class="w-[296px] h-9 relative">
+            <img src="/images/poopy-logo-main.svg" />
           </div>
         </div>
-        <div class="flex items-center gap-6">
-          <div class="flex-col justify-center items-end gap-1 inline-flex">
-            <div class="text-[#0b3d2a] text-xl font-normal font-['Balsamiq Sans']">
+        <div class="flex flex-row items-center gap-6">
+          <div class="flex flex-col justify-center align-center items-end gap-0">
+            <div class="text-headertextweak text-sm font-normal">
+              користувач
+            </div>
+            <div class="text-headertextstrong text-xl font-normal">
               Дмитро Забава
             </div>
           </div>
+          <a
+            href="/logout"
+            class="flex border rounded-xl w-16 h-10 border-headertextstrong justify-center items-center flex-wrap logout-button"
+          >
+            <img src="/images/logout.svg" />
+          </a>
         </div>
       </div>
     </div>

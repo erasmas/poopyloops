@@ -15,8 +15,15 @@ module.exports = {
     extend: {
       colors: {
         brand: "#fd4f00",
-        poopylime: "#e8eba6",
-        poopyheader: "#a9d769",
+        backgroundmain: "#FCFFB4",
+        accent: "#AAD869",
+        headertextstrong: "#0B3D2A",
+        headertextweak: "#447541",
+        bodytextstrong: "#3C3D2B",
+        bodytextweak: "#97996C",
+        strokeweak: "#E8EBA6",
+        strokestrong: "#C0C289",
+        textplaceholder: "#ADADAD",
       },
     },
   },

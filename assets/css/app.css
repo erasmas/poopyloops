@@ -3,3 +3,73 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+* {
+    font-family: "Balsamiq Sans";
+}
+
+.balsamiq-sans-regular {
+    font-family: "Balsamiq Sans", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.balsamiq-sans-bold {
+    font-family: "Balsamiq Sans", serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.balsamiq-sans-regular-italic {
+    font-family: "Balsamiq Sans", serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.balsamiq-sans-bold-italic {
+    font-family: "Balsamiq Sans", serif;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.logout-button {
+    background-color: transparent;
+    transition: all 128ms linear;
+}
+
+.logout-button:hover {
+    background-color: rgba(241, 255, 221, 0.5);
+}
+
+.logout-button:active {
+    background-color: rgba(241, 255, 221, 1);
+}
+
+.has-icon svg path {
+    stroke: currentColor;
+}
+
+.icon-button {
+    color: #adb07c;
+    transition: all 128ms linear;
+}
+
+.icon-button:hover {
+    color: #81835c;
+}
+
+.icon-button:active {
+    color: #53543b;
+}
+
+.option-button {
+    color: #83855e;
+    transition: all 128ms linear;
+}
+
+.option-button:hover {
+    color: #5b5c41;
+}
+
+.option-button:active {
+    color: #323324;
+}

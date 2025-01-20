@@ -1,86 +1,236 @@
 <.header>
-  {@playlist.name}
+  <div class="flex flex-col gap-2">
+    <div class="text-bodytextweak text-xl font-normal">плейлист</div>
+    <div class="flex flex-row gap-2">
+      <a class="flex has-icon icon-button p-1 w-10 h-10" navigate={~p"/playlists"}>
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 28 28"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M2.58831 9C4.49547 7.76344 5.87407 6.78276 7.3999 5.97593C6.07097 4.6825 4.55438 3.64917 2.58831 3C2.3059 5.34353 2.37036 6.65671 2.58831 9Z"
+            stroke="#97996C"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M13.7998 5.79997C18.0177 5.56868 20.5605 6.01949 25.1998 5.79997"
+            stroke="#97996C"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M2.7998 15.4679C6.64327 14.9914 20.0428 15.8159 25.1998 15.4679"
+            stroke="#97996C"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+          <path
+            d="M2.7998 24.2681C7.45501 23.7465 20.8536 24.2917 25.1998 24.2681"
+            stroke="#97996C"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+        </svg>
+      </a>
+      <div class="text-4xl text-bodytextstrong">{@playlist.name}</div>
+    </div>
+  </div>
   <:actions>
     <.link patch={~p"/playlists/#{@playlist}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Rename</.button>
+      <a href="#" class="flex has-icon icon-button p-1 w-10 h-10">
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10.6966 27.9437C8.21989 25.1154 6.82817 23.5373 4.05274 21.2999M10.6966 27.9437C7.57005 29.0512 5.69371 29.5279 2.90206 29.9894C2.37761 30.0761 1.92526 29.6196 2.01607 29.0958C2.51859 26.1976 3.00388 24.3268 4.05274 21.2999M10.6966 27.9437C16.8872 21.5351 20.3942 18.0064 26.7525 11.8878M4.05274 21.2999C10.0599 14.7658 13.5257 11.2014 20.1086 5.24399M20.1086 5.24399C21.2751 4.16134 22.0283 3.41088 22.9206 2.48358C23.5134 1.86752 24.4909 1.83109 25.1048 2.42606C26.7041 3.97587 27.8935 5.30303 29.5367 6.94366C30.1378 7.54378 30.1745 8.51558 29.5916 9.13333C28.7442 10.0313 27.9807 10.7794 26.7525 11.8878M20.1086 5.24399C22.8695 7.66856 24.088 9.35639 26.7525 11.8878"
+            stroke="#81835C"
+            stroke-opacity="0.64"
+            stroke-width="3"
+          />
+        </svg>
+      </a>
     </.link>
   </:actions>
 </.header>
 
 <div class="mt-5">
-  <form phx-submit="add_track" class="flex space-x-2">
+  <form phx-submit="add_track" class="flex space-x-2 h-14">
     <input
       type="url"
       name="youtube_link"
       id="youtube_link"
       required
-      class="border rounded w-full"
+      class="border w-full border-strokeweak text-bodytextstrong rounded-2xl focus:ring-accent focus:border-accent focus-visible:border-accent focus-visible:ring-accent placeholder:text-textplaceholder"
       placeholder="Add a YouTube link"
     />
-    <button type="submit" class="w-40 bg-blue-500 text-white rounded">Add Track</button>
+    <button
+      type="submit"
+      class="flex w-40 bg-accent border-accent border text-white rounded-2xl items-center justify-center hover:bg-transparent hover:border-bodytextstrong active:bg-[rgba(11,61,42,0.08)]"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M12 2C11.656 8.86753 12.1862 15.0207 12 22M2 12C9.90521 11.4091 14.37 12.5538 22 12"
+          stroke="black"
+          stroke-opacity="0.64"
+          stroke-width="3"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
   </form>
 </div>
 
 <div id="tracks">
   <ul class="mt-4 space-y-5">
     <%= for track <- @tracks |> Enum.sort_by(fn track -> {-track.likes, track.dislikes} end) do %>
-      <li id={track.id} class="bg-white shadow p-4 rounded">
-        <p><strong>Added by:</strong> {track.user.email}</p>
-        <p><strong>Added at:</strong> {track.inserted_at}</p>
-        <div class="mt-2 flex space-x-6 items-center">
-          <button
-            phx-click="toggle_like"
-            phx-value-track_id={track.id}
-            phx-value-like="true"
-            class={
-              "flex items-center space-x-2 " <>
-              if track.track_liked, do: "text-blue-500", else: "text-gray-700 hover:text-blue-500"
-            }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="w-6 h-6"
+      <li id={track.id} class="flex flex-col gap-1 mt-16">
+        <div class="flex justify-between">
+          <div class="flex gap-1 items-center">
+            <img class="w-6" src="/images/profile.svg" />
+            <span class="text-bodytextweak">{track.user.email}</span>
+          </div>
+          <div class="flex gap-8 items-center">
+            <a
+              href="#"
+              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
             >
-              <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
-            </svg>
-            <span class="text-md font-semibold">{track.likes || 0}</span>
-          </button>
-
-          <button
-            phx-click="toggle_like"
-            phx-value-track_id={track.id}
-            phx-value-like="false"
-            class={
-              "flex items-center space-x-2 " <>
-              if track.track_disliked, do: "text-red-500", else: "text-gray-700"
-            }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="w-6 h-6"
+              <svg
+                width="25"
+                height="25"
+                viewBox="0 0 25 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M7.02345 11.486C4.1489 13.9499 2.09565 17.2351 4.1489 19.699C6.20215 22.1629 9.8979 21.7523 13.1831 17.6458M11.5405 6.96889C14.4151 4.09433 16.4683 1.63043 19.7535 4.50498C23.0387 7.37954 19.7535 11.486 17.7003 13.1286M9.8979 14.7712C11.1299 13.1286 13.5938 11.486 14.4151 10.254"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+            <a
+              href="#"
+              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
             >
-              <path d="M15.73 5.5h1.035A7.465 7.465 0 0 1 18 9.625a7.465 7.465 0 0 1-1.235 4.125h-.148c-.806 0-1.534.446-2.031 1.08a9.04 9.04 0 0 1-2.861 2.4c-.723.384-1.35.956-1.653 1.715a4.499 4.499 0 0 0-.322 1.672v.633A.75.75 0 0 1 9 22a2.25 2.25 0 0 1-2.25-2.25c0-1.152.26-2.243.723-3.218.266-.558-.107-1.282-.725-1.282H3.622c-1.026 0-1.945-.694-2.054-1.715A12.137 12.137 0 0 1 1.5 12.25c0-2.848.992-5.464 2.649-7.521C4.537 4.247 5.136 4 5.754 4H9.77a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23ZM21.669 14.023c.536-1.362.831-2.845.831-4.398 0-1.22-.182-2.398-.52-3.507-.26-.85-1.084-1.368-1.973-1.368H19.1c-.445 0-.72.498-.523.898.591 1.2.924 2.55.924 3.977a8.958 8.958 0 0 1-1.302 4.666c-.245.403.028.959.5.959h1.053c.832 0 1.612-.453 1.918-1.227Z" />
-            </svg>
-            <span class="text-md font-semibold">{track.dislikes || 0}</span>
-          </button>
+              <svg
+                width="23"
+                height="26"
+                viewBox="0 0 23 26"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M14.662 1.0689C9.7339 1.39236 7.07975 0.808819 1.42183 1.0689C1.64048 10.6813 0.902168 15.8644 1.42183 24.8193C9.78632 24.412 13.6354 25.3824 21.2138 24.8193C21.6229 17.9542 21.1428 14.2907 21.2138 7.62073M14.662 1.0689C17.1801 3.64209 18.9142 4.90945 21.2138 7.62073M14.662 1.0689C14.4933 3.67794 14.8319 5.12832 14.662 7.62073C17.3113 7.63988 18.7652 7.77174 21.2138 7.62073"
+                  stroke="83855E"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M12.4994 10.6763V18.5264M12.4994 10.6763C16.9997 11.7764 15.9997 14.7761 16.9997 16.2761C17.7997 17.4761 17.4997 17.2761 17.4997 17.2761C16.6663 16.9427 15.1917 15.0443 14.9997 14.2764C14.4997 12.2764 13.4992 11.1763 12.4994 10.6763ZM12.4994 18.5264C12.5 20.7764 10.5 22.3758 9.7501 21.7761M12.4994 18.5264C11 17.7764 8.50011 20.7764 9.7501 21.7761M12.4994 18.5264L9.7501 21.7761"
+                  stroke="#83855E"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M6.90295 14.5264C7.00563 12.8019 6.85268 11.9414 6.90295 10.2764M9.04102 12.4143C7.31654 12.3116 6.45606 12.4645 4.79102 12.4143"
+                  stroke="#83855E"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </a>
+            <a
+              href="#"
+              class="flex has-icon option-button p-1 w-10 h-10 justify-center items-center"
+            >
+              <svg
+                width="26"
+                height="27"
+                viewBox="0 0 26 27"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.80943 4.89797C4.95312 12.5149 4.24687 16.7892 4.80943 25.0884C11.4747 25.7587 15.0679 25.3278 21.5713 25.0884C21.6861 17.8256 22.0011 13.3562 21.5713 4.89797M21.5713 4.89797H24.9999M21.5713 4.89797H17.3809M1.38086 4.89797H8.99991M8.99991 4.89797C8.93017 3.31845 8.89315 2.45128 8.99991 1.08845C12.035 0.869294 13.6967 1.13184 17.3809 1.08845C17.5668 2.38357 17.5129 3.26856 17.3809 4.89797M8.99991 4.89797H17.3809M8.99991 8.7075C9.31348 13.3907 8.92102 16.7179 8.99991 21.2789M13.1904 8.7075C13.426 13.065 13.4457 15.7142 13.1904 21.2789M17.3809 8.7075C17.1322 13.3715 17.0312 16.6189 17.3809 21.2789"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
-
         <%= if video_id = get_video_id(track.url) do %>
-          <div class="mt-4">
-            <iframe
-              width="560"
-              height="315"
-              src={"https://www.youtube.com/embed/#{video_id}"}
-              title="YouTube video player"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
+          <iframe
+            src={"https://www.youtube.com/embed/#{video_id}"}
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="shadow-md rounded-xl border border-strokeweak w-full aspect-video"
+          >
+          </iframe>
+          <div class="text-4xl font-bold text-bodytextstrong mt-4">Track Name</div>
+          <div class="text-xl font-normal text-bodytextweak mt-1">Artist</div>
+          <div class="mt-2 flex space-x-6 items-center">
+            <button
+              phx-click="toggle_like"
+              phx-value-track_id={track.id}
+              phx-value-like="true"
+              class={
+                  "flex w-full border border-strokestrong p-4 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
+                  if track.track_liked, do: "text-blue-500", else: "text-gray-700 hover:text-blue-500"
+                }
             >
-            </iframe>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
+              </svg>
+              <span class="text-md font-semibold">{track.likes || 0}</span>
+            </button>
+
+            <button
+              phx-click="toggle_like"
+              phx-value-track_id={track.id}
+              phx-value-like="false"
+              class={
+                  "flex w-full border border-strokestrong p-4 rounded-xl items-center space-x-2 justify-center text-bodytextweak has-icon " <>
+                  if track.track_disliked, do: "text-red-500", else: "text-gray-700"
+                }
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="w-6 h-6"
+              >
+                <path d="M15.73 5.5h1.035A7.465 7.465 0 0 1 18 9.625a7.465 7.465 0 0 1-1.235 4.125h-.148c-.806 0-1.534.446-2.031 1.08a9.04 9.04 0 0 1-2.861 2.4c-.723.384-1.35.956-1.653 1.715a4.499 4.499 0 0 0-.322 1.672v.633A.75.75 0 0 1 9 22a2.25 2.25 0 0 1-2.25-2.25c0-1.152.26-2.243.723-3.218.266-.558-.107-1.282-.725-1.282H3.622c-1.026 0-1.945-.694-2.054-1.715A12.137 12.137 0 0 1 1.5 12.25c0-2.848.992-5.464 2.649-7.521C4.537 4.247 5.136 4 5.754 4H9.77a4.5 4.5 0 0 1 1.423.23l3.114 1.04a4.5 4.5 0 0 0 1.423.23ZM21.669 14.023c.536-1.362.831-2.845.831-4.398 0-1.22-.182-2.398-.52-3.507-.26-.85-1.084-1.368-1.973-1.368H19.1c-.445 0-.72.498-.523.898.591 1.2.924 2.55.924 3.977a8.958 8.958 0 0 1-1.302 4.666c-.245.403.028.959.5.959h1.053c.832 0 1.612-.453 1.918-1.227Z" />
+              </svg>
+              <span class="text-md font-semibold">{track.dislikes || 0}</span>
+            </button>
           </div>
         <% else %>
           <p class="text-red-500">Invalid YouTube URL</p>
@@ -89,8 +239,6 @@
     <% end %>
   </ul>
 </div>
-
-<.back navigate={~p"/playlists"}>Back to playlists</.back>
 
 <.modal
   :if={@live_action == :edit}
