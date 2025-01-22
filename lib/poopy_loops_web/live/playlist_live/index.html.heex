@@ -12,7 +12,7 @@
   rows={@streams.playlists}
   row_click={fn {_id, playlist} -> JS.navigate(~p"/playlists/#{playlist}") end}
 >
-  <:col :let={{_id, playlist}} label="Name"><%= playlist.name %></:col>
+  <:col :let={{_id, playlist}} label="Name">{playlist.name}</:col>
   <:action :let={{_id, playlist}}>
     <div class="sr-only">
       <.link navigate={~p"/playlists/#{playlist}"}>Show</.link>
@@ -29,7 +29,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="playlist-modal" show on_cancel={JS.patch(~p"/playlists")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="playlist-modal"
+  show
+  on_cancel={JS.patch(~p"/playlists")}
+>
   <.live_component
     module={PoopyLoopsWeb.PlaylistLive.FormComponent}
     id={@playlist.id || :new}

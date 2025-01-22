@@ -167,15 +167,24 @@ defmodule PoopyLoops.Accounts do
   @doc """
   Retrieves existing OAuth user or creates it if it doesn't exist.
   """
-  def get_user_by_email_or_register(email) when is_binary(email) do
+  def get_user_by_email_or_register(%{"email" => email, "name" => name, "picture" => picture}) do
     case Repo.get_by(User, email: email) do
       nil ->
         # user needs some password, lets generate it and not tell them.
         pw = :crypto.strong_rand_bytes(30) |> Base.encode64(padding: false)
-        {:ok, user} = register_user(%{email: email, password: pw})
+
+        user_params = %{
+          email: email,
+          password: pw,
+          name: name,
+          picture: picture
+        }
+
+        {:ok, user} = register_user(user_params)
         user
 
       user ->
+        # TODO: update existing user with new name/picture if provided
         user
     end
   end
