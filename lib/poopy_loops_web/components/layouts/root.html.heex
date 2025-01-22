@@ -21,13 +21,6 @@
     </script>
   </head>
   <body class="bg-backgroundmain">
-    <%!-- <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-      <%= if @current_user do %>
-        <li class="text-[0.8125rem] leading-6 text-zinc-900">
-          {@current_user.email}
-        </li>
-      <% end %>
-    </ul> --%>
     <div class="w-full h-20 p-2.5 bg-accent flex justify-center items-center">
       <div class="h-[45px] w-full max-w-screen-xl flex justify-between items-center">
         <div class="flex items-center gap-3">
@@ -36,23 +29,26 @@
             <img src="/images/poopy-logo-main.svg" />
           </div>
         </div>
-        <div class="flex flex-row items-center gap-6">
-          <div class="flex flex-col justify-center align-center items-end gap-0">
-            <div class="text-headertextweak text-sm font-normal">
-              користувач
+        <%= if @current_user do %>
+          <div class="flex flex-row items-center gap-6">
+            <div class="flex flex-col justify-center align-center items-end gap-0">
+              <div class="text-headertextweak text-sm font-normal">
+                користувач
+              </div>
+              <div class="text-headertextstrong text-xl font-normal">
+                {@current_user.name}
+              </div>
             </div>
-            <div class="text-headertextstrong text-xl font-normal">
-              {@current_user.name}
-            </div>
+
+            <.link
+              href={~p"/users/log_out"}
+              method="delete"
+              class="flex border rounded-xl w-16 h-10 border-headertextstrong justify-center items-center flex-wrap logout-button"
+            >
+              <img src="/images/logout.svg" />
+            </.link>
           </div>
-          <.link
-            href={~p"/users/log_out"}
-            method="delete"
-            class="flex border rounded-xl w-16 h-10 border-headertextstrong justify-center items-center flex-wrap logout-button"
-          >
-            <img src="/images/logout.svg" />
-          </.link>
-        </div>
+        <% end %>
       </div>
     </div>
     {@inner_content}
