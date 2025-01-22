@@ -83,7 +83,7 @@ defmodule PoopyLoopsWeb.UserAuth do
     conn
     |> renew_session()
     |> delete_resp_cookie(@remember_me_cookie)
-    |> redirect(to: ~p"/")
+    |> redirect(to: ~p"/users/log_in")
   end
 
   @doc """
@@ -207,7 +207,7 @@ defmodule PoopyLoopsWeb.UserAuth do
     else
       conn
       |> maybe_store_return_to()
-      |> redirect(to: "/auth/google")
+      |> redirect(to: ~p"/users/log_in")
       |> halt()
     end
   end
