@@ -8,7 +8,6 @@ defmodule PoopyLoopsWeb.GoogleAuthController do
     config()
     |> Config.put(:user_return_to, get_session(conn, :user_return_to))
     |> Google.authorize_url()
-    |> IO.inspect(label: "authorize_url")
     |> case do
       {:ok, %{url: url, session_params: session_params}} ->
         # Session params (used for OAuth 2.0 and OIDC strategies) will be
@@ -44,7 +43,7 @@ defmodule PoopyLoopsWeb.GoogleAuthController do
         # Authorization succesful
         IO.inspect({user, token}, label: "user and token")
 
-        user_record = Accounts.get_user_by_email_or_register(user["email"])
+        user_record = Accounts.get_user_by_email_or_register(user)
         IO.inspect(user, label: "user and token")
 
         conn
