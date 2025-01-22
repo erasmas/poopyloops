@@ -56,11 +56,11 @@ defmodule PoopyLoopsWeb.Router do
   scope "/", PoopyLoopsWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    live_session :redirect_if_user_is_authenticated,
-      on_mount: [{PoopyLoopsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-    end
+    get "/users/log_in", UserSessionController, :new
 
-    post "/users/log_in", UserSessionController, :create
+    # live_session :redirect_if_user_is_authenticated,
+    #   on_mount: [{PoopyLoopsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+    # end
   end
 
   scope "/", PoopyLoopsWeb do

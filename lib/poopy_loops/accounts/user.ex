@@ -5,6 +5,8 @@ defmodule PoopyLoops.Accounts.User do
   @primary_key {:id, Ecto.ULID, autogenerate: true}
   schema "users" do
     field :email, :string
+    field :name, :string
+    field :picture, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -25,7 +27,7 @@ defmodule PoopyLoops.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email])
+    |> cast(attrs, [:email, :name, :picture])
     |> validate_email(opts)
   end
 
