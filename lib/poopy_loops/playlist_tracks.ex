@@ -68,6 +68,16 @@ defmodule PoopyLoops.PlaylistTracks do
     end
   end
 
+  def delete(track_id) do
+    case Repo.get(PlaylistTrack, track_id) do
+      nil ->
+        {:error, :track_not_found}
+
+      track ->
+        Repo.delete(track)
+    end
+  end
+
   def toggle_like(user_id, track_id, like) do
     Repo.transaction(fn ->
       # Fetch existing like/dislike

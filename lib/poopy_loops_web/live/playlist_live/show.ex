@@ -17,16 +17,17 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     tracks = PlaylistTracks.list_tracks(playlist.id, current_user.id)
 
     {:ok,
-     assign(socket,
+     socket
+     |> stream(:tracks, tracks)
+     |> assign(
        playlist: playlist,
-       current_user: socket.assigns[:current_user],
-       tracks: tracks
+       current_user: socket.assigns[:current_user]
      )}
   end
 
   @impl true
   def handle_info({:track_added, track}, socket) do
-    updated_tracks = [track | socket.assigns.tracks]
+    updated_tracks = [track | socket.streams.tracks]
     {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
@@ -65,6 +66,20 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
       {:error, reason} ->
         {:noreply, put_flash(socket, :error, "Failed to add track: #{reason}")}
     end
+  end
+
+  @impl true
+  def handle_event("delete_track", %{"track_id" => track_id}, socket) do
+    {:ok, deleted_track} = PlaylistTracks.delete(track_id)
+
+    {:noreply, stream_delete(socket, :tracks, deleted_track)}
+  end
+
+  @impl true
+  def handle_event("copy_url", %{"url" => url}, socket) do
+    {:noreply,
+      socket
+      |> push_event("copy_to_clipboard", %{value: url})}
   end
 
   @impl true
