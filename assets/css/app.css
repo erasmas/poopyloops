@@ -68,3 +68,14 @@
 .has-tooltip:hover .tooltip {
     @apply visible z-50;
 }
+
+.has-brand-pattern {
+    background-image: url("/images/bg-tile.png");
+    background-size: 24%;
+    background-blend-mode: multiply;
+}
+
+#auth-btn svg {
+    width: 48px;
+    height: 48px;
+}

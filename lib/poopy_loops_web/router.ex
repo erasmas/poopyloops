@@ -17,6 +17,11 @@ defmodule PoopyLoopsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :login_layout do
+    plug :put_root_layout, {PoopyLoopsWeb.Layouts, :login}
+    plug :put_layout, false
+  end
+
   scope "/", PoopyLoopsWeb do
     pipe_through :browser
 
@@ -27,6 +32,11 @@ defmodule PoopyLoopsWeb.Router do
     pipe_through [:browser]
     get "/", GoogleAuthController, :request
     get "/callback", GoogleAuthController, :callback
+  end
+
+  scope "/", PoopyLoopsWeb do
+    pipe_through [:browser, :login_layout]
+    live "/login", LoginLive
   end
 
   # Other scopes may use custom stacks.
