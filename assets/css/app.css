@@ -71,7 +71,7 @@
 
 .has-brand-pattern {
     background-image: url("/images/bg-tile.png");
-    background-size: 24%;
+    background-size: 256px;
     background-blend-mode: multiply;
 }
 
