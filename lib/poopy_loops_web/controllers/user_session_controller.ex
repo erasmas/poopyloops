@@ -3,8 +3,8 @@ defmodule PoopyLoopsWeb.UserSessionController do
 
   alias PoopyLoopsWeb.UserAuth
 
-  def new(conn, _params) do
-    render(conn, :new, error_message: nil)
+  def login(conn, _params) do
+    render(conn, :login, error_message: nil)
   end
 
   def delete(conn, _params) do
