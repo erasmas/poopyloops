@@ -26,6 +26,8 @@ module.exports = {
         strokestrong: "#C0C289",
         textplaceholder: "#ADADAD",
         tooltipbackground: "#181811",
+        auth: "#F2F2F2",
+        authhover: "#F2F2F2A3",
       },
     },
   },

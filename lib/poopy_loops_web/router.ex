@@ -17,6 +17,11 @@ defmodule PoopyLoopsWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :login_layout do
+    plug :put_root_layout, {PoopyLoopsWeb.Layouts, :login}
+    plug :put_layout, false
+  end
+
   scope "/", PoopyLoopsWeb do
     pipe_through :browser
 
@@ -54,9 +59,9 @@ defmodule PoopyLoopsWeb.Router do
   ## Authentication routes
 
   scope "/", PoopyLoopsWeb do
-    pipe_through [:browser, :redirect_if_user_is_authenticated]
+    pipe_through [:browser, :redirect_if_user_is_authenticated, :login_layout]
 
-    get "/users/log_in", UserSessionController, :new
+    get "/users/log_in", UserSessionController, :login
 
     # live_session :redirect_if_user_is_authenticated,
     #   on_mount: [{PoopyLoopsWeb.UserAuth, :redirect_if_user_is_authenticated}] do
