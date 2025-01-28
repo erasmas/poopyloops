@@ -34,3 +34,15 @@ poopy_loops-*.tar
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
 /assets/node_modules/
+
+# Phoenix LiveView generated files
+/priv/static/assets/
+/priv/static/cache_manifest.json
+/priv/static/favicon*
+/priv/static/images/*-*.svg
+/priv/static/images/*.svg.gz
+/priv/static/robots*.txt*
+/priv/static/*.gz
+
+# OS files
+.DS_Store
