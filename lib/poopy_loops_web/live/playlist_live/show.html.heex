@@ -63,7 +63,7 @@
   </form>
 </div>
 
-<div id="tracks">
+<div id="tracks" phx-update="stream">
   <ul class="flex flex-col mt-8 gap-24">
     <%= for {dom_id, track} <- @streams.tracks do %>
       <li id={dom_id} class="flex flex-col gap-1">
@@ -73,12 +73,12 @@
             <span class="text-bodytextweak">Added by {track.user.name}</span>
           </div>
           <div class="flex gap-4 items-center">
-          <a
-            href="#"
-            phx-click="copy_url"
-            phx-value-url={track.url}
-            class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
-          >
+            <a
+              href="#"
+              phx-click="copy_url"
+              phx-value-url={track.url}
+              class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
+            >
               <svg
                 width="25"
                 height="25"
@@ -97,7 +97,8 @@
             </a>
             <a
               href="#"
-              phx-click="delete_track" phx-value-track_id={track.id}
+              phx-click="delete_track"
+              phx-value-track_id={track.id}
               class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg

@@ -8,6 +8,10 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   @impl true
   def mount(%{"id" => playlist_id}, _session, socket) do
     if connected?(socket) do
+      # Unsubscribe first to ensure we don't have duplicate subscriptions
+      Phoenix.PubSub.unsubscribe(PoopyLoops.PubSub, "playlist:#{playlist_id}")
+      Phoenix.PubSub.unsubscribe(PoopyLoops.PubSub, PlaylistTracks.like_topic())
+
       Phoenix.PubSub.subscribe(PoopyLoops.PubSub, "playlist:#{playlist_id}")
       Phoenix.PubSub.subscribe(PoopyLoops.PubSub, PlaylistTracks.like_topic())
     end
@@ -27,8 +31,7 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
 
   @impl true
   def handle_info({:track_added, track}, socket) do
-    updated_tracks = [track | socket.streams.tracks]
-    {:noreply, assign(socket, tracks: updated_tracks)}
+    {:noreply, stream_insert(socket, :tracks, track, at: 0)}
   end
 
   @impl true
@@ -70,16 +73,20 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
 
   @impl true
   def handle_event("delete_track", %{"track_id" => track_id}, socket) do
-    {:ok, deleted_track} = PlaylistTracks.delete(track_id)
+    case PlaylistTracks.delete(track_id) do
+      {:ok, deleted_track} ->
+        {:noreply, stream_delete(socket, :tracks, deleted_track)}
 
-    {:noreply, stream_delete(socket, :tracks, deleted_track)}
+      {:error, :track_not_found} ->
+        {:noreply, put_flash(socket, :error, "Track not found")}
+    end
   end
 
   @impl true
   def handle_event("copy_url", %{"url" => url}, socket) do
     {:noreply,
-      socket
-      |> push_event("copy_to_clipboard", %{value: url})}
+     socket
+     |> push_event("copy_to_clipboard", %{value: url})}
   end
 
   @impl true
