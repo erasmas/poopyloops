@@ -20,13 +20,13 @@ defmodule PoopyLoopsWeb.PlaylistLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Playlist")
+    |> assign(:page_title, "Редагувати назву плейлиста")
     |> assign(:playlist, Playlists.get_playlist!(id))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Playlist")
+    |> assign(:page_title, "Cтворити новий плейлист")
     |> assign(:playlist, %Playlist{user_id: socket.assigns.current_user.id})
   end
 

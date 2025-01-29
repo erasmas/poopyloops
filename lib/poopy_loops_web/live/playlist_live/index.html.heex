@@ -2,7 +2,7 @@
   <h1 class="text-4xl text-bodytextstrong font-normal">Плейлисти</h1>
   <:actions>
     <.link patch={~p"/playlists/new"}>
-      <button class="flex w-32 h-12 bg-accent border-accent border-2 text-white rounded-2xl items-center justify-center hover:bg-transparent hover:border-bodytextweak active:bg-[rgba(11,61,42,0.08)]">
+      <button class="flex w-24 sm:w-32 h-14 bg-accent border-accent border-2 text-white rounded-2xl items-center justify-center hover:bg-transparent hover:border-bodytextweak active:bg-[rgba(11,61,42,0.08)]">
         <svg
           width="24"
           height="24"
@@ -23,60 +23,63 @@
   </:actions>
 </.header>
 
-<.table
-  id="playlists"
-  rows={@streams.playlists}
-  row_click={fn {_id, playlist} -> JS.navigate(~p"/playlists/#{playlist}") end}
->
-  <:col :let={{_id, playlist}} label="Name">
-    <div class="text-xl font-normal">{playlist.name}</div>
-  </:col>
-  <:action :let={{_id, playlist}}>
-    <div class="sr-only">
-      <.link navigate={~p"/playlists/#{playlist}"}>Show</.link>
-    </div>
-    <.link patch={~p"/playlists/#{playlist}/edit"}>
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 32 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M10.6966 27.9437C8.21989 25.1154 6.82817 23.5373 4.05274 21.2999M10.6966 27.9437C7.57005 29.0512 5.69371 29.5279 2.90206 29.9894C2.37761 30.0761 1.92526 29.6196 2.01607 29.0958C2.51859 26.1976 3.00388 24.3268 4.05274 21.2999M10.6966 27.9437C16.8872 21.5351 20.3942 18.0064 26.7525 11.8878M4.05274 21.2999C10.0599 14.7658 13.5257 11.2014 20.1086 5.24399M20.1086 5.24399C21.2751 4.16134 22.0283 3.41088 22.9206 2.48358C23.5134 1.86752 24.4909 1.83109 25.1048 2.42606C26.7041 3.97587 27.8935 5.30303 29.5367 6.94366C30.1378 7.54378 30.1745 8.51558 29.5916 9.13333C28.7442 10.0313 27.9807 10.7794 26.7525 11.8878M20.1086 5.24399C22.8695 7.66856 24.088 9.35639 26.7525 11.8878"
-          stroke="#81835C"
-          stroke-opacity="1"
-          stroke-width="3"
-        />
-      </svg>
-    </.link>
-  </:action>
-  <:action :let={{id, playlist}}>
-    <.link
-      phx-click={JS.push("delete", value: %{id: playlist.id}) |> hide("##{id}")}
-      data-confirm="Are you sure?"
-      class="has-icon icon-button"
+<ul id="playlists" class="flex flex-col gap-4 mt-8">
+  <%= for {id, playlist} <- @streams.playlists do %>
+    <li
+      id={id}
+      class="flex items-center justify-between py-3 px-4 rounded-xl border border-bodystrokeweak cursor-pointer hover:border-bodystrokestrong hover:bg-[#ffffff80] transition-all"
+      phx-click={JS.navigate(~p"/playlists/#{playlist}")}
     >
-      <svg
-        width="22"
-        height="22"
-        viewBox="0 0 22 22"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M4.33371 4.18892C4.45127 10.4203 3.87349 13.9171 4.33371 20.7067C9.78653 21.255 12.7261 20.9025 18.0466 20.7067C18.1404 14.765 18.3982 11.1086 18.0466 4.18892M18.0466 4.18892H20.8515M18.0466 4.18892H14.6184M1.52881 4.18892H7.76193M7.76193 4.18892C7.70488 2.89672 7.6746 2.18729 7.76193 1.07236C10.2449 0.89307 11.6044 1.10786 14.6184 1.07236C14.7704 2.1319 14.7264 2.8559 14.6184 4.18892M7.76193 4.18892H14.6184M7.76193 7.30548C8.01846 11.1368 7.6974 13.8588 7.76193 17.5901M11.1901 7.30548C11.3829 10.8703 11.399 13.0376 11.1901 17.5901M14.6184 7.30548C14.4149 11.1211 14.3323 13.7778 14.6184 17.5901"
-          stroke="black"
-          stroke-opacity="1"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-    </.link>
-  </:action>
-</.table>
+      <div class="flex-1">
+        <div class="text-xl font-normal pl-3">{playlist.name}</div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <%!-- Edit button --%>
+        <.link patch={~p"/playlists/#{playlist}/edit"} class="has-icon icon-button p-4">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M10.6966 27.9437C8.21989 25.1154 6.82817 23.5373 4.05274 21.2999M10.6966 27.9437C7.57005 29.0512 5.69371 29.5279 2.90206 29.9894C2.37761 30.0761 1.92526 29.6196 2.01607 29.0958C2.51859 26.1976 3.00388 24.3268 4.05274 21.2999M10.6966 27.9437C16.8872 21.5351 20.3942 18.0064 26.7525 11.8878M4.05274 21.2999C10.0599 14.7658 13.5257 11.2014 20.1086 5.24399M20.1086 5.24399C21.2751 4.16134 22.0283 3.41088 22.9206 2.48358C23.5134 1.86752 24.4909 1.83109 25.1048 2.42606C26.7041 3.97587 27.8935 5.30303 29.5367 6.94366C30.1378 7.54378 30.1745 8.51558 29.5916 9.13333C28.7442 10.0313 27.9807 10.7794 26.7525 11.8878M20.1086 5.24399C22.8695 7.66856 24.088 9.35639 26.7525 11.8878"
+              stroke="#81835C"
+              stroke-opacity="1"
+              stroke-width="3"
+            />
+          </svg>
+        </.link>
+
+        <%!-- Delete button --%>
+        <.link
+          phx-click={JS.push("delete", value: %{id: playlist.id}) |> hide("##{id}")}
+          data-confirm="Are you sure?"
+          class="has-icon delete-button p-4"
+        >
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4.33371 4.18892C4.45127 10.4203 3.87349 13.9171 4.33371 20.7067C9.78653 21.255 12.7261 20.9025 18.0466 20.7067C18.1404 14.765 18.3982 11.1086 18.0466 4.18892M18.0466 4.18892H20.8515M18.0466 4.18892H14.6184M1.52881 4.18892H7.76193M7.76193 4.18892C7.70488 2.89672 7.6746 2.18729 7.76193 1.07236C10.2449 0.89307 11.6044 1.10786 14.6184 1.07236C14.7704 2.1319 14.7264 2.8559 14.6184 4.18892M7.76193 4.18892H14.6184M7.76193 7.30548C8.01846 11.1368 7.6974 13.8588 7.76193 17.5901M11.1901 7.30548C11.3829 10.8703 11.399 13.0376 11.1901 17.5901M14.6184 7.30548C14.4149 11.1211 14.3323 13.7778 14.6184 17.5901"
+              stroke="black"
+              stroke-opacity="1"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </.link>
+      </div>
+    </li>
+  <% end %>
+</ul>
 
 <.modal
   :if={@live_action in [:new, :edit]}
