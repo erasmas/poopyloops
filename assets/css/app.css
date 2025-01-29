@@ -61,6 +61,15 @@
     color: #323324;
 }
 
+.delete-button {
+    color: #83855e;
+    transition: all 128ms linear;
+}
+
+.delete-button:hover {
+    color: #c51313;
+}
+
 .tooltip {
     @apply invisible absolute;
 }
@@ -78,4 +87,28 @@
 #auth-btn svg {
     width: 48px;
     height: 48px;
+}
+
+#playlist-modal-container {
+    background-color: #fcffb4;
+}
+
+#playlist-modal-container h1 {
+    color: #3c3d2b;
+    font-size: 24px;
+    font-weight: 400;
+}
+
+#playlist-modal-container label {
+    color: #97996c;
+    font-weight: 400;
+}
+
+#playlist-modal-container input {
+    color: #3c3d2b;
+    border: 2px solid #e8eba6;
+    border-radius: 12px;
+    margin-top: 0px;
+    font-size: 16px;
+    padding: 12px;
 }

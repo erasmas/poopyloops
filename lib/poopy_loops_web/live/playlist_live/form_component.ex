@@ -20,9 +20,28 @@ defmodule PoopyLoopsWeb.PlaylistLive.FormComponent do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
+        <.input field={@form[:name]} type="text" label="Назва плейлиста" />
         <:actions>
-          <.button phx-disable-with="Saving...">Save Playlist</.button>
+          <button
+            phx-disable-with="Saving..."
+            class="flex bg-accent h-14 w-32 justify-center items-center rounded-xl border-2 border-accent hover:bg-transparent hover:border-accent active:bg-[rgba(11,61,42,0.08)]"
+          >
+            <svg
+              width="26"
+              height="22"
+              viewBox="0 0 26 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2 9.28669C4.41986 11.9747 7.67265 14.6956 9.82211 17.4444C16.3 11.3333 16.8245 9.8741 24 4"
+                stroke="#0B3D2A"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
         </:actions>
       </.simple_form>
     </div>
