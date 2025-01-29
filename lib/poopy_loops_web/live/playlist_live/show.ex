@@ -35,15 +35,8 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   end
 
   @impl true
-  def handle_info({:track_like_updated, %{track_id: track_id, like: like}}, socket) do
-    updated_tracks = update_like_in_tracks(socket.assigns.tracks, track_id, like)
-    {:noreply, assign(socket, tracks: updated_tracks)}
-  end
-
-  @impl true
-  def handle_info({:track_like_removed, %{track_id: track_id, like: like}}, socket) do
-    updated_tracks = remove_like_in_tracks(socket.assigns.tracks, track_id, like)
-    {:noreply, assign(socket, tracks: updated_tracks)}
+  def handle_info({:track_updated, track}, socket) do
+    {:noreply, stream_insert(socket, :tracks, track)}
   end
 
   @impl true
@@ -101,34 +94,6 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to toggle like.")}
     end
-  end
-
-  defp update_like_in_tracks(tracks, track_id, like) do
-    Enum.map(tracks, fn track ->
-      if track.id == track_id do
-        if like do
-          %{track | likes: track.likes + 1}
-        else
-          %{track | dislikes: track.dislikes + 1}
-        end
-      else
-        track
-      end
-    end)
-  end
-
-  defp remove_like_in_tracks(tracks, track_id, like) do
-    Enum.map(tracks, fn track ->
-      if track.id == track_id do
-        if like do
-          %{track | likes: track.likes - 1}
-        else
-          %{track | dislikes: track.dislikes - 1}
-        end
-      else
-        track
-      end
-    end)
   end
 
   def get_video_id(url) do

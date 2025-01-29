@@ -64,7 +64,7 @@
 </div>
 
 <div id="tracks" phx-update="stream">
-  <ul class="flex flex-col mt-8 gap-24">
+  <ul id="tracks-ul" class="flex flex-col mt-8 gap-24">
     <%= for {dom_id, track} <- @streams.tracks do %>
       <li id={dom_id} class="flex flex-col gap-1">
         <div class="flex justify-between">
