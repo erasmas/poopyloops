@@ -63,20 +63,18 @@
   </form>
 </div>
 
-<div id="tracks" phx-update="stream">
-  <ul id="tracks-ul" class="flex flex-col mt-8 gap-24">
-    <%= for {dom_id, track} <- @streams.tracks do %>
-      <li id={dom_id} class="flex flex-col gap-1">
+<div id="tracks">
+  <ul class="flex flex-col mt-8 gap-24">
+    <%= for track <- @tracks |> Enum.sort_by(fn track -> {-track.likes, track.dislikes} end) do %>
+      <li id={track.id} class="flex flex-col gap-1">
         <div class="flex justify-between">
           <div class="flex gap-1 items-center">
             <img class="w-6" src="/images/profile.svg" />
-            <span class="text-bodytextweak">Added by {track.user.name}</span>
+            <span class="text-bodytextweak">{track.user.email}</span>
           </div>
           <div class="flex gap-4 items-center">
             <a
               href="#"
-              phx-click="copy_url"
-              phx-value-url={track.url}
               class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg
@@ -97,8 +95,6 @@
             </a>
             <a
               href="#"
-              phx-click="delete_track"
-              phx-value-track_id={track.id}
               class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"
             >
               <svg

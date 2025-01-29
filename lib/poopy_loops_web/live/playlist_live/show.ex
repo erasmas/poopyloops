@@ -8,10 +8,6 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   @impl true
   def mount(%{"id" => playlist_id}, _session, socket) do
     if connected?(socket) do
-      # Unsubscribe first to ensure we don't have duplicate subscriptions
-      Phoenix.PubSub.unsubscribe(PoopyLoops.PubSub, "playlist:#{playlist_id}")
-      Phoenix.PubSub.unsubscribe(PoopyLoops.PubSub, PlaylistTracks.like_topic())
-
       Phoenix.PubSub.subscribe(PoopyLoops.PubSub, "playlist:#{playlist_id}")
       Phoenix.PubSub.subscribe(PoopyLoops.PubSub, PlaylistTracks.like_topic())
     end
@@ -21,22 +17,29 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     tracks = PlaylistTracks.list_tracks(playlist.id, current_user.id)
 
     {:ok,
-     socket
-     |> stream(:tracks, tracks)
-     |> assign(
+     assign(socket,
        playlist: playlist,
-       current_user: socket.assigns[:current_user]
+       current_user: socket.assigns[:current_user],
+       tracks: tracks
      )}
   end
 
   @impl true
   def handle_info({:track_added, track}, socket) do
-    {:noreply, stream_insert(socket, :tracks, track, at: 0)}
+    updated_tracks = [track | socket.assigns.tracks]
+    {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
   @impl true
-  def handle_info({:track_updated, track}, socket) do
-    {:noreply, stream_insert(socket, :tracks, track)}
+  def handle_info({:track_like_updated, %{track_id: track_id, like: like}}, socket) do
+    updated_tracks = update_like_in_tracks(socket.assigns.tracks, track_id, like)
+    {:noreply, assign(socket, tracks: updated_tracks)}
+  end
+
+  @impl true
+  def handle_info({:track_like_removed, %{track_id: track_id, like: like}}, socket) do
+    updated_tracks = remove_like_in_tracks(socket.assigns.tracks, track_id, like)
+    {:noreply, assign(socket, tracks: updated_tracks)}
   end
 
   @impl true
@@ -65,24 +68,6 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   end
 
   @impl true
-  def handle_event("delete_track", %{"track_id" => track_id}, socket) do
-    case PlaylistTracks.delete(track_id) do
-      {:ok, deleted_track} ->
-        {:noreply, stream_delete(socket, :tracks, deleted_track)}
-
-      {:error, :track_not_found} ->
-        {:noreply, put_flash(socket, :error, "Track not found")}
-    end
-  end
-
-  @impl true
-  def handle_event("copy_url", %{"url" => url}, socket) do
-    {:noreply,
-     socket
-     |> push_event("copy_to_clipboard", %{value: url})}
-  end
-
-  @impl true
   def handle_event("toggle_like", %{"track_id" => track_id, "like" => like}, socket) do
     user_id = socket.assigns.current_user.id
     like = String.to_existing_atom(like)
@@ -94,6 +79,34 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
       {:error, _changeset} ->
         {:noreply, put_flash(socket, :error, "Failed to toggle like.")}
     end
+  end
+
+  defp update_like_in_tracks(tracks, track_id, like) do
+    Enum.map(tracks, fn track ->
+      if track.id == track_id do
+        if like do
+          %{track | likes: track.likes + 1}
+        else
+          %{track | dislikes: track.dislikes + 1}
+        end
+      else
+        track
+      end
+    end)
+  end
+
+  defp remove_like_in_tracks(tracks, track_id, like) do
+    Enum.map(tracks, fn track ->
+      if track.id == track_id do
+        if like do
+          %{track | likes: track.likes - 1}
+        else
+          %{track | dislikes: track.dislikes - 1}
+        end
+      else
+        track
+      end
+    end)
   end
 
   def get_video_id(url) do
