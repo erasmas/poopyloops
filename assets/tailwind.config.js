@@ -22,6 +22,8 @@ module.exports = {
         headertextweak: "#447541",
         bodytextstrong: "#3C3D2B",
         bodytextweak: "#97996C",
+        bodystrokeweak: "#eff29f",
+        bodystrokestrong: "#c5c880",
         strokeweak: "#E8EBA6",
         strokestrong: "#C0C289",
         textplaceholder: "#ADADAD",

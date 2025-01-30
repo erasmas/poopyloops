@@ -4,8 +4,8 @@ defmodule PoopyLoops.Repo.Migrations.CreatePlaylistTracks do
   def change do
     create table(:playlist_tracks) do
       add :url, :string
-      add :playlist_id, references(:playlists, on_delete: :nothing)
-      add :user_id, references(:users, on_delete: :nothing)
+      add :playlist_id, references(:playlists, on_delete: :delete_all)
+      add :user_id, references(:users, on_delete: :delete_all)
 
       timestamps(type: :utc_datetime)
     end
