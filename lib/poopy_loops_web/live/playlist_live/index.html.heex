@@ -56,7 +56,7 @@
         <%!-- Delete button --%>
         <.link
           phx-click={JS.push("delete", value: %{id: playlist.id}) |> hide("##{id}")}
-          data-confirm="Шо серйозно?"
+          data-confirm="Шо, серйозно?"
           class="has-icon delete-button p-4"
         >
           <svg

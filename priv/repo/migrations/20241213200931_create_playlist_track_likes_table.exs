@@ -4,7 +4,7 @@ defmodule PoopyLoops.Repo.Migrations.AddTrackLikesTable do
   def change do
     create table(:playlist_track_likes) do
       add :user_id, references(:users, on_delete: :nothing), null: false
-      add :playlist_track_id, references(:playlist_tracks, on_delete: :nothing), null: false
+      add :playlist_track_id, references(:playlist_tracks, on_delete: :delete_all), null: false
       add :like, :boolean, null: false
 
       timestamps(type: :utc_datetime)
