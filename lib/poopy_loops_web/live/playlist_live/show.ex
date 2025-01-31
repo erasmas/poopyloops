@@ -79,6 +79,7 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
   def handle_event("copy_url", %{"url" => url}, socket) do
     {:noreply,
      socket
+     |> put_flash(:info, "Скопійовано!")
      |> push_event("copy_to_clipboard", %{value: url})}
   end
 

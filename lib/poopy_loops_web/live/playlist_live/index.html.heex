@@ -23,7 +23,7 @@
   </:actions>
 </.header>
 
-<ul id="playlists" class="flex flex-col gap-4 mt-8">
+<ul id="playlists" phx-update="stream" class="flex flex-col gap-4 mt-8">
   <%= for {id, playlist} <- @streams.playlists do %>
     <li
       id={id}
@@ -56,7 +56,7 @@
         <%!-- Delete button --%>
         <.link
           phx-click={JS.push("delete", value: %{id: playlist.id}) |> hide("##{id}")}
-          data-confirm="Шо, серйозно?"
+          data-confirm="Астанавітєсь!"
           class="has-icon delete-button p-4"
         >
           <svg

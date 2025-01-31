@@ -38,7 +38,7 @@
       id="youtube_link"
       required
       class="border-2 w-full border-strokeweak text-bodytextstrong rounded-2xl focus:ring-accent focus:border-accent focus-visible:border-accent focus-visible:ring-accent placeholder:text-textplaceholder"
-      placeholder="Add a YouTube link"
+      placeholder="Додайте YouTube посилання"
     />
     <button
       type="submit"
@@ -63,14 +63,14 @@
   </form>
 </div>
 
-<div id="tracks" phx-update="stream">
-  <ul id="tracks-ul" class="flex flex-col mt-8 gap-24">
+<div id="tracks">
+  <ul id="tracks-list" phx-update="stream" class="flex flex-col mt-8 gap-24">
     <%= for {dom_id, track} <- @streams.tracks do %>
       <li id={dom_id} class="flex flex-col gap-1">
         <div class="flex justify-between">
           <div class="flex gap-1 items-center">
             <img class="w-6" src="/images/profile.svg" />
-            <span class="text-bodytextweak">Added by {track.user.name}</span>
+            <span class="text-bodytextweak">Додав {track.user.name}</span>
           </div>
           <div class="flex gap-4 items-center">
             <a
@@ -97,6 +97,7 @@
             </a>
             <a
               href="#"
+              data-confirm="Та ви шо, серйозно?"
               phx-click="delete_track"
               phx-value-track_id={track.id}
               class="flex has-icon icon-button p-1 w-10 h-10 justify-center items-center"

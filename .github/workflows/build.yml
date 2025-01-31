@@ -55,7 +55,7 @@ jobs:
           echo "archive_path=$ARCHIVE_PATH" >> $GITHUB_ENV
 
       - name: Upload Release Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.archive_path }}
           if-no-files-found: error
