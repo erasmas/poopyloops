@@ -41,10 +41,13 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    playlist = Playlists.get_playlist!(id)
+
     {:noreply,
      socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:playlist, Playlists.get_playlist!(id))}
+     |> assign(:page_title, page_title(socket.assigns.live_action, playlist))
+     |> assign(:playlist, playlist)
+     |> assign(:live_action, socket.assigns.live_action)}
   end
 
   @impl true
@@ -104,6 +107,6 @@ defmodule PoopyLoopsWeb.PlaylistLive.Show do
     end
   end
 
-  defp page_title(:show), do: "Show Playlist"
-  defp page_title(:edit), do: "Edit Playlist"
+  defp page_title(:edit, playlist), do: "Edit #{playlist.name}"
+  defp page_title(:show, playlist), do: playlist.name
 end
