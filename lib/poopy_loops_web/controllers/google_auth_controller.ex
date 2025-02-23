@@ -5,7 +5,7 @@ defmodule PoopyLoopsWeb.GoogleAuthController do
   alias PoopyLoops.Accounts
 
   def request(conn, _params) do
-    config()
+    get_config()
     |> Config.put(:user_return_to, get_session(conn, :user_return_to))
     |> Google.authorize_url()
     |> case do
@@ -34,7 +34,7 @@ defmodule PoopyLoopsWeb.GoogleAuthController do
     # request phase will be used in the callback phase
     session_params = get_session(conn, :session_params)
 
-    config()
+    get_config()
     # Session params should be added to the config so the strategy can use them
     |> Config.put(:session_params, session_params)
     |> Google.callback(params)
@@ -59,7 +59,11 @@ defmodule PoopyLoopsWeb.GoogleAuthController do
     end
   end
 
-  defp config() do
-    Application.fetch_env!(:poopy_loops, :assent)
+  defp get_config do
+    [
+      client_id: System.fetch_env!("GOOGLE_CLIENT_ID"),
+      client_secret: System.fetch_env!("GOOGLE_CLIENT_SECRET"),
+      redirect_uri: System.fetch_env!("GOOGLE_OAUTH_REDIRECT_URL")
+    ]
   end
 end

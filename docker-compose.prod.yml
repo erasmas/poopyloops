@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:17.3
+    container_name: poopyloops_postgres
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.prod.postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U poopy"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432"
+
+  poopyloops:
+    image: poopyloops:latest
+    container_name: poopyloops_app
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env.prod.app
+    security_opt:
+      - apparmor=unconfined
+    ports:
+      - "4000:4000"
+
+volumes:
+  postgres_data:
+    name: poopyloops_postgres_data

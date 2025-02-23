@@ -22,11 +22,6 @@ config :poopy_loops, PoopyLoopsWeb.Endpoint,
   pubsub_server: PoopyLoops.PubSub,
   live_view: [signing_salt: "vkJ2DGBz"]
 
-config :poopy_loops, :assent,
-  client_id: System.get_env("GOOGLE_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
-  redirect_uri: System.get_env("GOOGLE_OAUTH_REDIRECT_URL")
-
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
