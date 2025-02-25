@@ -11,6 +11,7 @@ PoopyLoops has the following features:
 * Updates to a playlist are broadcasted to clients using [Phoenix.PubSub](https://hexdocs.pm/phoenix_pubsub/2.1.3/Phoenix.PubSub.html)
 * Playlist tracks are sorted based on reactions
 * Playlists can be shared using a private link
+* Impressive logo and design by [alexyzhuk](https://github.com/alexyzhuk)
 
 ## Development
 
