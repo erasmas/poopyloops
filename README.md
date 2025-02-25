@@ -2,7 +2,8 @@
 
 [PoopyLoops](https://poopyloops.fyi) is a silly little web service to collaborate on music playlists and vote for the most liked songs.
 Previously, I was using Excel spreadsheets for this, but it was dull and had a corporate smell.
-This was built just for fun and to try out Phoenix LiveView.
+
+This was built just for fun and to try out [Phoenix LiveView](https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html).
 
 PoopyLoops has the following features:
 
