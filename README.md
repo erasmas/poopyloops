@@ -1,4 +1,4 @@
-# PoopyLoops
+# 💩 PoopyLoops
 
 [PoopyLoops](https://poopyloops.fyi) is a silly little web service to collaborate on music playlists and vote for the most liked songs.
 Previously, I was using Excel spreadsheets for this, but it was dull and had a corporate smell.
